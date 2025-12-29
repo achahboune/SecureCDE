@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Compliance-Ready Cloud Dev Environments</title>
   <meta name="description" content="Onboard engineers in minutes. Audit-ready. No DevOps required." />
+
+  <!-- Favicon (force) -->
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <meta name="theme-color" content="#0b1020">
+
   <style>
     :root{
       --bg:#0b1020; --card:#0f1733; --text:#e9eefc; --muted:#a9b4d6;
@@ -13,10 +19,7 @@
       --radius:16px;
     }
     *{box-sizing:border-box}
-<<<<<<< HEAD
-=======
     html{scroll-behavior:smooth}
->>>>>>> 55b911b (update index.html)
     body{
       margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
       background: radial-gradient(1200px 600px at 30% -10%, rgba(122,162,255,.35), transparent 60%),
@@ -31,21 +34,13 @@
     .pill{font-size:12px; color:var(--muted); border:1px solid var(--line); padding:8px 10px; border-radius:999px;}
     .hero{border:1px solid var(--line); background:rgba(15,23,51,.75); border-radius:var(--radius); padding:28px;}
     h1{margin:0 0 10px; font-size:34px; line-height:1.1}
-<<<<<<< HEAD
-    .sub{margin:0 0 18px; color:var(--muted); font-size:16px}
-=======
     .sub{margin:0 0 10px; color:var(--muted); font-size:16px}
     .sub2{margin:0 0 18px; color:rgba(233,238,252,.7); font-size:13px}
->>>>>>> 55b911b (update index.html)
     .ctaRow{display:flex; gap:10px; flex-wrap:wrap}
     .btn{
       display:inline-flex; align-items:center; justify-content:center;
       padding:12px 14px; border-radius:12px; border:1px solid var(--line);
-<<<<<<< HEAD
-      text-decoration:none; font-weight:650;
-=======
       text-decoration:none; font-weight:650; cursor:pointer;
->>>>>>> 55b911b (update index.html)
     }
     .btn.primary{background:var(--btn); color:var(--btnText); border-color:transparent}
     .btn.secondary{background:transparent}
@@ -67,21 +62,13 @@
     .formTitle{margin:0 0 10px; font-size:18px}
     form{display:grid; gap:10px; grid-template-columns: repeat(12, 1fr); margin-top:10px}
     label{font-size:12px; color:#cfd7f5; display:block; margin-bottom:6px}
-<<<<<<< HEAD
-    input, select{
-      width:100%; padding:12px 12px; border-radius:12px;
-      border:1px solid var(--line); background:rgba(11,16,32,.55); color:var(--text);
-      outline:none;
-    }
-=======
     input, select, textarea{
       width:100%; padding:12px 12px; border-radius:12px;
       border:1px solid var(--line); background:rgba(11,16,32,.55); color:var(--text);
       outline:none; font-family:inherit;
     }
     textarea{min-height:110px; resize:vertical}
->>>>>>> 55b911b (update index.html)
-    input::placeholder{color:rgba(233,238,252,.55)}
+    input::placeholder, textarea::placeholder{color:rgba(233,238,252,.55)}
     .col6{grid-column: span 6}
     .col12{grid-column: span 12}
     .hint{font-size:12px; color:var(--muted); margin-top:8px}
@@ -107,18 +94,12 @@
     <section class="hero">
       <h1>Compliance-Ready Cloud Dev Environments</h1>
       <p class="sub">Onboard engineers in minutes. Audit-ready. No DevOps required.</p>
-<<<<<<< HEAD
-
-      <div class="ctaRow">
-        <a class="btn primary" href="#form">Request Security Pack</a>
-        <a class="btn secondary" href="https://calendly.com/achahboune/new-meeting" target="_blank" rel="noopener">Book a 15-min Call</a>
-=======
       <p class="sub2">Prefer async? No call needed — we reply by email (French or English).</p>
 
       <div class="ctaRow">
         <a class="btn primary" href="#form">Request Security Pack</a>
         <a class="btn secondary" href="#form">Request Async Demo (No Call)</a>
->>>>>>> 55b911b (update index.html)
+        <a class="btn secondary" href="https://calendly.com/achahboune/new-meeting" target="_blank" rel="noopener">Book a 15-min Call</a>
       </div>
     </section>
 
@@ -210,8 +191,6 @@
           </div>
 
           <div class="col6">
-<<<<<<< HEAD
-=======
             <label>Preferred language</label>
             <select name="preferred_language" required>
               <option value="" disabled selected>Select</option>
@@ -221,7 +200,6 @@
           </div>
 
           <div class="col6">
->>>>>>> 55b911b (update index.html)
             <label>Want a pilot?</label>
             <select name="want_pilot" required>
               <option value="" disabled selected>Select</option>
@@ -230,14 +208,6 @@
             </select>
           </div>
 
-<<<<<<< HEAD
-          <input type="hidden" name="source" value="landing-vercel" />
-          <input type="hidden" name="page" value="compliance-cde" />
-
-          <div class="col12">
-            <button class="btn primary" type="submit">Send</button>
-            <div class="hint">We’ll reply within 24 hours.</div>
-=======
           <div class="col12">
             <label>Your question (async)</label>
             <textarea name="async_question" placeholder="Tell us your constraints (compliance, networking, data residency, SSO, timeline). We will reply by email." required></textarea>
@@ -249,17 +219,12 @@
           <div class="col12">
             <button class="btn primary" type="submit">Send</button>
             <div class="hint">No call needed. We reply within 24 hours by email.</div>
->>>>>>> 55b911b (update index.html)
           </div>
         </form>
 
         <div class="footer">
           <span>Privacy: we only use your info to respond to this request.</span>
-<<<<<<< HEAD
-          <span>© 2025</span>
-=======
           <span>© 2025 SecureCDE</span>
->>>>>>> 55b911b (update index.html)
         </div>
       </div>
     </section>
