@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Aegis — auditor-approved developer workspaces</title>
-  <meta name="description" content="Compliant-by-default developer workspaces for regulated teams. Onboard engineers in minutes. Audit-ready. No DevOps required." />
 
-  <!-- Favicon (force) -->
+  <title>Aegis — auditor-approved developer workspaces</title>
+  <meta name="description" content="Compliance-ready developer workspaces for regulated teams. Audit-ready by default. No DevOps required." />
+
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="shortcut icon" href="/favicon.ico">
   <meta name="theme-color" content="#0b1020">
@@ -19,7 +19,6 @@
       --radius:16px;
     }
     *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
     body{
       margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
       background: radial-gradient(1200px 600px at 30% -10%, rgba(122,162,255,.35), transparent 60%),
@@ -30,19 +29,23 @@
     a{color:inherit}
     .wrap{max-width:980px; margin:0 auto; padding:40px 18px 70px}
     .top{display:flex; gap:14px; align-items:center; justify-content:space-between; margin-bottom:26px;}
-    .brand{font-weight:800; letter-spacing:.3px}
+    .brand{font-weight:850; letter-spacing:.3px}
     .pill{font-size:12px; color:var(--muted); border:1px solid var(--line); padding:8px 10px; border-radius:999px;}
+
     .hero{border:1px solid var(--line); background:rgba(15,23,51,.75); border-radius:var(--radius); padding:28px;}
     h1{margin:0 0 10px; font-size:34px; line-height:1.1}
     .sub{margin:0 0 10px; color:var(--muted); font-size:16px}
     .sub2{margin:0 0 18px; color:rgba(233,238,252,.7); font-size:13px}
     .ctaRow{display:flex; gap:10px; flex-wrap:wrap}
+
     .btn{
       display:inline-flex; align-items:center; justify-content:center;
       padding:12px 14px; border-radius:12px; border:1px solid var(--line);
       text-decoration:none; font-weight:650; cursor:pointer;
+      background:transparent;
     }
     .btn.primary{background:var(--btn); color:var(--btnText); border-color:transparent}
+
     .grid{display:grid; gap:14px; margin-top:14px; grid-template-columns: repeat(12, 1fr);}
     .card{
       grid-column: span 6;
@@ -52,13 +55,52 @@
     .card h2{margin:0 0 10px; font-size:14px; letter-spacing:.4px; text-transform:uppercase; color:#cfd7f5}
     ul{margin:0; padding-left:18px; color:var(--muted)}
     li{margin:8px 0}
-    .formCard{
-      grid-column: span 12;
-      border:1px solid rgba(122,162,255,.35);
-      background: linear-gradient(180deg, rgba(122,162,255,.12), rgba(15,23,51,.65));
-      border-radius:var(--radius); padding:18px;
+
+    .footer{
+      margin-top:18px; color:var(--muted); font-size:12px;
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;
+      border-top:1px solid rgba(255,255,255,.08);
+      padding-top:14px;
     }
-    .formTitle{margin:0 0 10px; font-size:18px}
+
+    /* Modal */
+    body.modalOpen{overflow:hidden}
+    .modalOverlay{
+      position:fixed; inset:0;
+      background:rgba(0,0,0,.62);
+      display:none;
+      align-items:center; justify-content:center;
+      padding:18px;
+      z-index:9999;
+    }
+    .modalOverlay.open{display:flex}
+    .modal{
+      width:min(760px, 96vw);
+      max-height:88vh;
+      overflow:auto;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      background:rgba(15,23,51,.98);
+      padding:18px;
+    }
+    .modalHead{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:14px;
+      margin-bottom:10px;
+    }
+    .modalKicker{font-size:12px; color:var(--muted); margin-bottom:6px}
+    .modalTitle{margin:0 0 4px; font-size:18px}
+    .modalSub{font-size:12px; color:var(--muted)}
+    .modalClose{
+      background:transparent;
+      border:1px solid var(--line);
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 12px;
+      cursor:pointer;
+    }
     form{display:grid; gap:10px; grid-template-columns: repeat(12, 1fr); margin-top:10px}
     label{font-size:12px; color:#cfd7f5; display:block; margin-bottom:6px}
     input, select, textarea{
@@ -71,14 +113,12 @@
     .col6{grid-column: span 6}
     .col12{grid-column: span 12}
     .hint{font-size:12px; color:var(--muted); margin-top:8px}
-    .footer{
-      margin-top:18px; color:var(--muted); font-size:12px;
-      display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;
-    }
+
     @media (max-width:720px){
       .card{grid-column: span 12}
       .col6{grid-column: span 12}
       h1{font-size:28px}
+      .top{flex-direction:column; align-items:flex-start}
     }
   </style>
 </head>
@@ -93,13 +133,11 @@
     <section class="hero">
       <h1>Developer workspaces auditors accept.</h1>
       <p class="sub">Onboard engineers in minutes — without breaking HIPAA / SOC2 / FedRAMP requirements.</p>
-      <p class="sub2">100% async: request the Security Pack. We reply by email (French or English).</p>
+      <p class="sub2">100% async. Request the Security Pack + Pilot Plan. We reply by email (French or English).</p>
 
       <div class="ctaRow">
-        <a class="btn primary" href="#form"
-           onclick="document.getElementById('form').scrollIntoView({behavior:'smooth'}); return false;">
-          Request Security Pack
-        </a>
+        <!-- Keep href="#form" so you can share /#form links -->
+        <a class="btn primary" href="#form" id="openPack">Request Security Pack</a>
       </div>
     </section>
 
@@ -107,9 +145,9 @@
       <div class="card">
         <h2>Problem</h2>
         <ul>
-          <li>“Works on my machine” slows delivery</li>
           <li>Onboarding takes days</li>
-          <li>Secrets, IAM, and auth break dev/prod parity</li>
+          <li>Environment drift (“works on my machine”)</li>
+          <li>Security / compliance blocks cloud dev tools</li>
         </ul>
       </div>
 
@@ -117,7 +155,7 @@
         <h2>What Aegis adds</h2>
         <ul>
           <li>Compliance defaults + evidence (audit-ready)</li>
-          <li>Guardrails: access control, logging, egress options</li>
+          <li>Guardrails: access control, logs, egress options</li>
           <li>Fast onboarding without a platform team</li>
         </ul>
       </div>
@@ -126,75 +164,140 @@
         <h2>Who it’s for</h2>
         <ul>
           <li>Healthcare / Fintech / Gov contractors</li>
-          <li>Teams blocked from Codespaces/Gitpod due to compliance</li>
-          <li>Teams that can’t afford self-hosted complexity</li>
+          <li>Teams blocked from Codespaces/Gitpod</li>
+          <li>Teams who can’t afford self-hosted complexity</li>
         </ul>
       </div>
 
       <div class="card">
-        <h2>What you get (Pilot)</h2>
+        <h2>Pilot deliverable</h2>
         <ul>
           <li>1–2 reference workspaces</li>
           <li>Security + compliance mapping pack</li>
           <li>Cost controls + auto-shutdown policies</li>
-          <li>Onboarding workflow (new hire → first commit)</li>
+          <li>Onboarding path (new hire → first commit)</li>
         </ul>
       </div>
-
-      <div class="formCard" id="form">
-        <h3 class="formTitle">Get the Security Pack + Pilot Plan</h3>
-
-        <form method="POST" action="https://formspree.io/f/xeeqjzrn">
-          <div class="col6">
-            <label>Work email</label>
-            <input name="work_email" type="email" placeholder="name@company.com" required />
-          </div>
-
-          <div class="col6">
-            <label>Company</label>
-            <input name="company" type="text" placeholder="Company name" required />
-          </div>
-
-          <div class="col6">
-            <label>Compliance</label>
-            <select name="compliance" required>
-              <option value="" disabled selected>Select</option>
-              <option>HIPAA</option>
-              <option>FedRAMP</option>
-              <option>SOC2</option>
-              <option>PCI</option>
-              <option>Other</option>
-            </select>
-          </div>
-
-          <div class="col6">
-            <label>Main pain (pick one)</label>
-            <select name="pain" required>
-              <option value="" disabled selected>Select</option>
-              <option>Onboarding takes days</option>
-              <option>Audit / compliance blocks cloud dev</option>
-              <option>“Works on my machine” / env drift</option>
-              <option>Secrets/IAM/auth too hard to replicate</option>
-              <option>Cost control (idle envs)</option>
-              <option>Other</option>
-            </select>
-          </div>
-
-          <input type="hidden" name="source" value="landing-vercel" />
-          <input type="hidden" name="page" value="aegis" />
-
-          <div class="col12">
-            <button class="btn primary" type="submit">Get Security Pack</button>
-            <div class="hint">We’ll reply by email.</div>
-          </div>
-        </form>
-
-        <div class="footer">
-          <span>Privacy: we only use your info to respond to this request.</span>
-          <span>© 2025 Aegis</span>
-        </div>
-      </div>
     </section>
+
+    <div class="footer">
+      <span>Privacy: we only use your info to respond to this request.</span>
+      <span>© 2025 Aegis</span>
+    </div>
   </div>
+
+  <!-- Hidden anchor target (for /#form links) -->
+  <div id="form" style="height:1px; width:1px; overflow:hidden;"></div>
+
+  <!-- Modal -->
+  <div class="modalOverlay" id="packModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modalHead">
+        <div>
+          <div class="modalKicker">Aegis</div>
+          <h3 class="modalTitle" id="modalTitle">Get the Security Pack + Pilot Plan</h3>
+          <div class="modalSub">We reply by email — no call needed.</div>
+        </div>
+        <button class="modalClose" id="closePack" type="button">Close</button>
+      </div>
+
+      <form method="POST" action="https://formspree.io/f/xeeqjzrn">
+        <div class="col6">
+          <label>Work email</label>
+          <input name="work_email" type="email" placeholder="name@company.com" required />
+        </div>
+
+        <div class="col6">
+          <label>Company</label>
+          <input name="company" type="text" placeholder="Company name" required />
+        </div>
+
+        <div class="col6">
+          <label>Compliance</label>
+          <select name="compliance" required>
+            <option value="" disabled selected>Select</option>
+            <option>HIPAA</option>
+            <option>FedRAMP</option>
+            <option>SOC2</option>
+            <option>PCI</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="col6">
+          <label>Main pain (pick one)</label>
+          <select name="pain" required>
+            <option value="" disabled selected>Select</option>
+            <option>Onboarding takes days</option>
+            <option>Audit / compliance blocks cloud dev</option>
+            <option>“Works on my machine” / env drift</option>
+            <option>Secrets/IAM/auth too hard to replicate</option>
+            <option>Cost control (idle envs)</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <input type="hidden" name="source" value="landing-vercel" />
+        <input type="hidden" name="page" value="aegis" />
+
+        <div class="col12">
+          <button class="btn primary" type="submit">Send</button>
+          <div class="hint">We’ll reply by email.</div>
+        </div>
+      </form>
+
+      <div class="footer" style="border-top:1px solid rgba(255,255,255,.08); padding-top:14px; margin-top:14px;">
+        <span>We only use your info to answer this request.</span>
+        <span>© 2025 Aegis</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    const openBtn = document.getElementById('openPack');
+    const modal = document.getElementById('packModal');
+    const closeBtn = document.getElementById('closePack');
+
+    function openModal(){
+      if (!modal) return;
+      modal.classList.add('open');
+      document.body.classList.add('modalOpen');
+      modal.setAttribute('aria-hidden', 'false');
+      // focus first input for better UX
+      const first = modal.querySelector('input, select, textarea, button');
+      if (first) setTimeout(() => first.focus(), 0);
+    }
+
+    function closeModal(){
+      if (!modal) return;
+      modal.classList.remove('open');
+      document.body.classList.remove('modalOpen');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+
+    openBtn && openBtn.addEventListener('click', function(e){
+      e.preventDefault();
+      openModal();
+    });
+
+    closeBtn && closeBtn.addEventListener('click', closeModal);
+
+    modal && modal.addEventListener('click', function(e){
+      if (e.target === modal) closeModal();
+    });
+
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // If user lands on /#form, open modal automatically
+    if (location.hash === '#form') {
+      openModal();
+      // remove hash so page doesn't "do nothing" on next click
+      history.replaceState(null, '', location.pathname + location.search);
+    }
+  })();
+  </script>
 </body>
 </html>
