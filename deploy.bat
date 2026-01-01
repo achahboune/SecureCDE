@@ -1,29 +1,16 @@
 @echo off
 setlocal EnableExtensions EnableDelayedExpansion
 cd /d "%~dp0"
-@echo off
-setlocal EnableExtensions EnableDelayedExpansion
-cd /d "%~dp0"
 
-REM =========================
-REM CONFIG
-REM =========================
 set REMOTE=origin
 set ENV_FILE=.env.local
 
-REM =========================
-REM SETUP MODE
-REM Usage: deploy.bat setup
-REM =========================
 if /I "%~1"=="setup" goto setup
 
-REM =========================
-REM MAIN MODE
-REM Usage: deploy.bat "message"
-REM =========================
+REM --- sanity: must be inside git repo
 git rev-parse --is-inside-work-tree >nul 2>&1
 if errorlevel 1 (
-  echo ERROR: Not a git repository.
+  echo ERROR: Not a git repository in "%cd%".
   exit /b 1
 )
 
@@ -32,7 +19,6 @@ for /f "delims=" %%b in ('git rev-parse --abbrev-ref HEAD') do set BRANCH=%%b
 git remote get-url %REMOTE% >nul 2>&1
 if errorlevel 1 (
   echo ERROR: Remote "%REMOTE%" not found.
-  echo Fix: git remote add %REMOTE% ^<YOUR_GITHUB_REPO_URL^>
   exit /b 1
 )
 
@@ -54,13 +40,11 @@ echo [2/3] Push: %REMOTE% %BRANCH%
 git push %REMOTE% %BRANCH%
 if errorlevel 1 goto err
 
-REM =========================
-REM Optional: trigger Cloudflare Pages Deploy Hook
-REM =========================
+REM --- read deploy hook (optional) from .env.local
 set HOOK_URL=
 if exist "%ENV_FILE%" (
-  for /f "usebackq tokens=1,* delims==" %%A in ("%ENV_FILE%") do (
-    if /I "%%A"=="CLOUDFLARE_DEPLOY_HOOK_URL" set HOOK_URL=%%B
+  for /f "usebackq tokens=1,* delims==" %%A in (`findstr /I "^CLOUDFLARE_DEPLOY_HOOK_URL=" "%ENV_FILE%"`) do (
+    set HOOK_URL=%%B
   )
 )
 
@@ -74,7 +58,7 @@ if not "%HOOK_URL%"=="" (
   )
 ) else (
   echo [3/3] Cloudflare deploy hook not set. (OK if auto-deploy is enabled)
-  echo Tip: run ^"deploy.bat setup^" to save your Deploy Hook URL.
+  echo Tip: run "deploy.bat setup" to save your Deploy Hook URL.
 )
 
 echo DONE
@@ -82,33 +66,27 @@ exit /b 0
 
 :setup
 echo === Cloudflare Pages Deploy Hook Setup ===
-echo 1) In Cloudflare Pages: Settings ^> Builds ^& deployments ^> Deploy hooks
-echo 2) Create a Deploy Hook and copy the URL
-echo.
-
 set /p INPUT=Paste your CLOUDFLARE_DEPLOY_HOOK_URL (or leave blank to skip): 
 
 if "%INPUT%"=="" (
-  echo Skipped. Auto-deploy will work on git push if enabled.
+  echo Skipped.
   exit /b 0
 )
 
-REM Create or update .env.local
-if not exist "%ENV_FILE%" (
-  echo CLOUDFLARE_DEPLOY_HOOK_URL=%INPUT%>"%ENV_FILE%"
-) else (
-  REM Remove existing key and rewrite
-  (for /f "usebackq delims=" %%L in ("%ENV_FILE%") do (
+REM Write/replace the key safely
+if exist "%ENV_FILE%" (
+  del /q "%ENV_FILE%.tmp" >nul 2>&1
+  for /f "usebackq delims=" %%L in ("%ENV_FILE%") do (
     echo %%L | findstr /I /B "CLOUDFLARE_DEPLOY_HOOK_URL=" >nul
-    if errorlevel 1 echo %%L
-  )) > "%ENV_FILE%.tmp"
+    if errorlevel 1 echo %%L>>"%ENV_FILE%.tmp"
+  )
   echo CLOUDFLARE_DEPLOY_HOOK_URL=%INPUT%>>"%ENV_FILE%.tmp"
   move /y "%ENV_FILE%.tmp" "%ENV_FILE%" >nul
+) else (
+  echo CLOUDFLARE_DEPLOY_HOOK_URL=%INPUT%>"%ENV_FILE%"
 )
 
-echo Saved in %ENV_FILE%:
-echo CLOUDFLARE_DEPLOY_HOOK_URL=******
-
+echo Saved: CLOUDFLARE_DEPLOY_HOOK_URL=******
 echo SETUP DONE. Next: deploy.bat "update"
 exit /b 0
 
