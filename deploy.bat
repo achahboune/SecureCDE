@@ -1,29 +1,35 @@
 @echo off
 setlocal EnableExtensions EnableDelayedExpansion
-cd /d "%~dp0"
+pushd "%~dp0" >nul
 
-set REMOTE=origin
-set ENV_FILE=.env.local
+set "REMOTE=origin"
+set "BRANCH=main"
+set "ENV_FILE=.env.local"
 
 if /I "%~1"=="setup" goto setup
 
-REM --- check git repo
-git rev-parse --is-inside-work-tree >nul 2>&1
-if errorlevel 1 (
-  echo ERROR: Not a git repository in "%cd%".
+REM --- hard check: must have .git folder here
+if not exist ".git" (
+  echo ERROR: .git not found in "%cd%".
+  echo Tip: deploy.bat must be in the repo root.
+  popd >nul
   exit /b 1
 )
 
-for /f "delims=" %%b in ('git rev-parse --abbrev-ref HEAD') do set BRANCH=%%b
+REM --- verify git is callable
+where git >nul 2>&1
+if errorlevel 1 (
+  echo ERROR: git not found in PATH.
+  echo Fix: install Git for Windows or reopen terminal after install.
+  popd >nul
+  exit /b 1
+)
 
-REM --- commit message
-set MSG=%~1
-if "%MSG%"=="" set MSG=deploy update
+set "MSG=%~1"
+if "%MSG%"=="" set "MSG=deploy update"
 
-REM --- stage
 git add -A
 
-REM --- commit only if there are staged changes
 git diff --cached --quiet
 if errorlevel 1 (
   echo [1/3] Commit: %MSG%
@@ -33,36 +39,36 @@ if errorlevel 1 (
   echo [1/3] No changes to commit.
 )
 
-REM --- push
 echo [2/3] Push: %REMOTE% %BRANCH%
 git push %REMOTE% %BRANCH%
 if errorlevel 1 goto err
 
-REM --- read deploy hook (optional)
-set HOOK_URL=
+REM --- read hook from .env.local
+set "HOOK_URL="
 if exist "%ENV_FILE%" (
-  for /f "tokens=1,* delims==" %%A in ('findstr /I /B "CLOUDFLARE_DEPLOY_HOOK_URL=" "%ENV_FILE%"') do set HOOK_URL=%%B
+  for /f "usebackq tokens=1,* delims==" %%A in ("%ENV_FILE%") do (
+    if /I "%%A"=="CLOUDFLARE_DEPLOY_HOOK_URL" set "HOOK_URL=%%B"
+  )
 )
 
-REM remove quotes if any
-set HOOK_URL=%HOOK_URL:"=%
+set "HOOK_URL=%HOOK_URL:"=%"
 
-if "%HOOK_URL%"=="" goto nohook
-
-:hook
-echo [3/3] Trigger Cloudflare Pages deploy hook...
-curl -s -X POST "%HOOK_URL%" >nul
-if errorlevel 1 (
-  echo WARNING: Deploy hook call failed. Your push may still auto-deploy.
+if not "%HOOK_URL%"=="" (
+  echo [3/3] Trigger Cloudflare Pages deploy hook...
+  curl -s -X POST "%HOOK_URL%" >nul
+  if errorlevel 1 (
+    echo WARNING: Deploy hook call failed. Your push may still auto-deploy.
+  ) else (
+    echo Deploy hook triggered.
+  )
 ) else (
-  echo Deploy hook triggered.
+  echo [3/3] Cloudflare deploy hook not set. (OK if auto-deploy is enabled)
+  echo Tip: run "deploy.bat setup" to save your Deploy Hook URL.
 )
-goto done
 
-:nohook
-echo [3/3] Cloudflare deploy hook not set. (OK if auto-deploy is enabled)
-echo Tip: run "deploy.bat setup" to save your Deploy Hook URL.
-goto done
+echo DONE
+popd >nul
+exit /b 0
 
 :setup
 echo === Cloudflare Pages Deploy Hook Setup ===
@@ -70,21 +76,17 @@ set /p INPUT=Paste your CLOUDFLARE_DEPLOY_HOOK_URL (or leave blank to skip):
 
 if "%INPUT%"=="" (
   echo Skipped.
+  popd >nul
   exit /b 0
 )
 
-REM write/update .env.local (simple + safe)
-if exist "%ENV_FILE%" del /q "%ENV_FILE%" >nul 2>&1
-echo CLOUDFLARE_DEPLOY_HOOK_URL=%INPUT%>"%ENV_FILE%"
-
+> "%ENV_FILE%" echo CLOUDFLARE_DEPLOY_HOOK_URL=%INPUT%
 echo Saved: CLOUDFLARE_DEPLOY_HOOK_URL=******
 echo SETUP DONE. Next: deploy.bat "update"
+popd >nul
 exit /b 0
 
 :err
 echo FAILED (see error above)
+popd >nul
 exit /b 1
-
-:done
-echo DONE
-exit /b 0
