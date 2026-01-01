@@ -1,13 +1,18 @@
 @echo off
 setlocal EnableExtensions EnableDelayedExpansion
+
+REM Always run from the script directory (repo root)
 cd /d "%~dp0"
+
+REM Debug (optional)
+REM echo Running in: "%cd%"
 
 set REMOTE=origin
 set ENV_FILE=.env.local
 
 if /I "%~1"=="setup" goto setup
 
-REM --- sanity: must be inside git repo
+REM --- must be inside git repo
 git rev-parse --is-inside-work-tree >nul 2>&1
 if errorlevel 1 (
   echo ERROR: Not a git repository in "%cd%".
@@ -40,10 +45,10 @@ echo [2/3] Push: %REMOTE% %BRANCH%
 git push %REMOTE% %BRANCH%
 if errorlevel 1 goto err
 
-REM --- read deploy hook (optional) from .env.local
+REM --- Optional: trigger Cloudflare Pages Deploy Hook from .env.local
 set HOOK_URL=
 if exist "%ENV_FILE%" (
-  for /f "usebackq tokens=1,* delims==" %%A in (`findstr /I "^CLOUDFLARE_DEPLOY_HOOK_URL=" "%ENV_FILE%"`) do (
+  for /f "usebackq tokens=1,* delims==" %%A in (`findstr /I /B "CLOUDFLARE_DEPLOY_HOOK_URL=" "%ENV_FILE%" 2^>nul`) do (
     set HOOK_URL=%%B
   )
 )
@@ -73,7 +78,7 @@ if "%INPUT%"=="" (
   exit /b 0
 )
 
-REM Write/replace the key safely
+REM Replace or add the key in .env.local
 if exist "%ENV_FILE%" (
   del /q "%ENV_FILE%.tmp" >nul 2>&1
   for /f "usebackq delims=" %%L in ("%ENV_FILE%") do (
