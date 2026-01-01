@@ -75,13 +75,13 @@
     }
     .modalOverlay.open{display:flex}
     .modal{
-      width:min(760px, 96vw);
-      max-height:88vh;
+      width:min(980px, 96vw);
+      max-height:92vh;
       overflow:auto;
       border:1px solid var(--line);
       border-radius:var(--radius);
       background:rgba(15,23,51,.98);
-      padding:18px;
+      padding:28px;
     }
     .modalHead{
       display:flex;
@@ -92,7 +92,6 @@
     }
     .modalKicker{font-size:12px; color:var(--muted); margin-bottom:6px}
     .modalTitle{margin:0 0 4px; font-size:18px}
-    .modalSub{font-size:12px; color:var(--muted)}
     .modalClose{
       background:transparent;
       border:1px solid var(--line);
@@ -101,6 +100,7 @@
       padding:10px 12px;
       cursor:pointer;
     }
+
     form{display:grid; gap:10px; grid-template-columns: repeat(12, 1fr); margin-top:10px}
     label{font-size:12px; color:#cfd7f5; display:block; margin-bottom:6px}
     input, select, textarea{
@@ -114,37 +114,33 @@
     .col12{grid-column: span 12}
     .hint{font-size:12px; color:var(--muted); margin-top:8px}
 
+    .successBox{
+      border:1px solid rgba(122,255,210,.35);
+      background:rgba(122,255,210,.10);
+      border-radius:12px;
+      padding:14px;
+    }
+    .errorBox{
+      border:1px solid rgba(255,122,122,.35);
+      background:rgba(255,122,122,.10);
+      border-radius:12px;
+      padding:14px;
+      color:var(--text);
+    }
+
+    .tsWrap{ margin-top:10px; display:flex; justify-content:flex-start; }
+    .actionsRow{ margin-top:10px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+
     @media (max-width:720px){
       .card{grid-column: span 12}
       .col6{grid-column: span 12}
       h1{font-size:28px}
       .top{flex-direction:column; align-items:flex-start}
     }
-.successBox{
-  border:1px solid rgba(122,255,210,.35);
-  background:rgba(122,255,210,.10);
-  border-radius:12px;
-  padding:14px;
-}
-.errorBox{
-  border:1px solid rgba(255,122,122,.35);
-  background:rgba(255,122,122,.10);
-  border-radius:12px;
-  padding:14px;
-  color:var(--text);
-}
-.modal{
-  width:min(980px, 96vw);
-  max-height:92vh;
-  overflow:auto;
-  border:1px solid var(--line);
-  border-radius:var(--radius);
-  background:rgba(15,23,51,.98);
-  padding:28px;
-}
-
-
   </style>
+
+  <!-- Turnstile -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 
 <body>
@@ -160,7 +156,6 @@
       <p class="sub2">100% async. Request the Security Pack + Pilot Plan. We reply by email (French or English).</p>
 
       <div class="ctaRow">
-        <!-- Keep href="#form" so you can share /#form links -->
         <a class="btn primary" href="#form" id="openPack">Request Security Pack</a>
       </div>
     </section>
@@ -210,7 +205,6 @@
     </div>
   </div>
 
-  <!-- Hidden anchor target (for /#form links) -->
   <div id="form" style="height:1px; width:1px; overflow:hidden;"></div>
 
   <!-- Modal -->
@@ -224,7 +218,7 @@
         <button class="modalClose" id="closePack" type="button">Close</button>
       </div>
 
-      <form method="POST" action="/api/lead">
+      <form id="leadForm" method="POST" action="/api/lead">
         <div class="col6">
           <label>Work email</label>
           <input name="work_email" type="email" placeholder="name@company.com" required />
@@ -261,32 +255,39 @@
         </div>
 
         <input type="hidden" name="source" value="landing-cloudflare" />
-        <input type="hidden" name="page" value="aegis" />
+        <input type="hidden" name="page" id="pageField" value="" />
 
+        <!-- Turnstile must be INSIDE the form -->
         <div class="col12">
-          <button class="btn primary" type="submit">Send</button>
-          <div class="hint">We’ll reply by email.</div>
+          <div class="tsWrap">
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAACKGH_2u3M4Bw007"></div>
+          </div>
+
+          <div class="actionsRow">
+            <button class="btn primary" type="submit" id="submitBtn">Send</button>
+            <div class="hint">We’ll reply by email.</div>
+          </div>
         </div>
       </form>
-<div id="packSuccess" style="display:none">
-  <div class="successBox">
-    <h3 style="margin:0 0 6px;">Thanks — request received ✅</h3>
-    <p style="margin:0; color:var(--muted);">
-      We’ll email you the <b>Security Pack</b> + the <b>Pilot Plan</b>.
-      Please check your spam folder as well.
-    </p>
-    <div style="margin-top:12px;">
-      <button class="btn primary" type="button" id="closeAfterSuccess">Close</button>
-    </div>
-  </div>
-</div>
 
+      <div id="packSuccess" style="display:none">
+        <div class="successBox">
+          <h3 style="margin:0 0 6px;">Thanks — request received ✅</h3>
+          <p style="margin:0; color:var(--muted);">
+            We’ll email you the <b>Security Pack</b> + the <b>Pilot Plan</b>.
+            Please check your spam folder as well.
+          </p>
+          <div style="margin-top:12px;">
+            <button class="btn primary" type="button" id="closeAfterSuccess">Close</button>
+          </div>
+        </div>
+      </div>
 
-<div id="packError" style="display:none">
-  <div class="errorBox">
-    Oops — something went wrong. Please try again.
-  </div>
-</div>
+      <div id="packError" style="display:none">
+        <div class="errorBox" id="errorText">
+          Oops — something went wrong. Please try again.
+        </div>
+      </div>
 
       <div class="footer" style="border-top:1px solid rgba(255,255,255,.08); padding-top:14px; margin-top:14px;">
         <span>We only use your info to answer this request.</span>
@@ -301,13 +302,17 @@
   const modal = document.getElementById('packModal');
   const closeBtn = document.getElementById('closePack');
 
-  const form = modal ? modal.querySelector('form') : null;
+  const form = document.getElementById('leadForm');
   const success = document.getElementById('packSuccess');
   const errorBox = document.getElementById('packError');
+  const errorText = document.getElementById('errorText');
   const closeAfter = document.getElementById('closeAfterSuccess');
 
-  const submitBtn = form ? form.querySelector('button[type="submit"]') : null;
+  const submitBtn = document.getElementById('submitBtn');
   const submitOriginal = submitBtn ? submitBtn.textContent : 'Send';
+
+  const pageField = document.getElementById('pageField');
+  if (pageField) pageField.value = location.href;
 
   function resetModalState() {
     if (form) form.style.display = 'grid';
@@ -349,12 +354,20 @@
     if (e.key === 'Escape') closeModal();
   });
 
-  // AJAX submit + custom thank you
   form && form.addEventListener('submit', async function (e) {
     e.preventDefault();
 
     if (errorBox) errorBox.style.display = 'none';
     if (success) success.style.display = 'none';
+    if (pageField) pageField.value = location.href;
+
+    // Turnstile token exists only after user completes widget
+    const tsToken = document.querySelector('[name="cf-turnstile-response"]')?.value || "";
+    if (!tsToken) {
+      if (errorText) errorText.textContent = "Please complete the anti-bot check (Turnstile) and try again.";
+      if (errorBox) errorBox.style.display = 'block';
+      return;
+    }
 
     if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Sending…'; }
 
@@ -369,17 +382,29 @@
         form.reset();
         form.style.display = 'none';
         if (success) success.style.display = 'block';
+
+        // Reset Turnstile widget (safe)
+        try { if (window.turnstile) window.turnstile.reset(); } catch(e) {}
       } else {
+        let msg = "Oops — something went wrong. Please try again.";
+        try {
+          const j = await res.json();
+          if (j && j.error) msg = String(j.error);
+        } catch(e) {}
+        if (errorText) errorText.textContent = msg;
         if (errorBox) errorBox.style.display = 'block';
+
+        try { if (window.turnstile) window.turnstile.reset(); } catch(e) {}
       }
     } catch (err) {
+      if (errorText) errorText.textContent = "Network error. Please try again.";
       if (errorBox) errorBox.style.display = 'block';
+      try { if (window.turnstile) window.turnstile.reset(); } catch(e) {}
     } finally {
       if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = submitOriginal; }
     }
   });
 
-  // /#form opens modal
   if (location.hash === '#form') {
     openModal();
     history.replaceState(null, '', location.pathname + location.search);
