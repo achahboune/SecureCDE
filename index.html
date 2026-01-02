@@ -43,6 +43,7 @@
       padding:12px 14px; border-radius:12px; border:1px solid var(--line);
       text-decoration:none; font-weight:650; cursor:pointer;
       background:transparent;
+      color:var(--text);
     }
     .btn.primary{background:var(--btn); color:var(--btnText); border-color:transparent}
 
@@ -108,11 +109,13 @@
       border:1px solid var(--line); background:rgba(11,16,32,.55); color:var(--text);
       outline:none; font-family:inherit;
     }
-    textarea{min-height:110px; resize:vertical}
     input::placeholder, textarea::placeholder{color:rgba(233,238,252,.55)}
     .col6{grid-column: span 6}
     .col12{grid-column: span 12}
-    .hint{font-size:12px; color:var(--muted); margin-top:8px}
+
+    .tsWrap{margin-top:6px}
+    .actionsRow{display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:8px}
+    .hint{font-size:12px; color:var(--muted)}
 
     .successBox{
       border:1px solid rgba(122,255,210,.35);
@@ -127,9 +130,6 @@
       padding:14px;
       color:var(--text);
     }
-
-    .tsWrap{ margin-top:10px; display:flex; justify-content:flex-start; }
-    .actionsRow{ margin-top:10px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
 
     @media (max-width:720px){
       .card{grid-column: span 12}
@@ -207,7 +207,6 @@
 
   <div id="form" style="height:1px; width:1px; overflow:hidden;"></div>
 
-  <!-- Modal -->
   <div class="modalOverlay" id="packModal" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
       <div class="modalHead">
@@ -218,6 +217,7 @@
         <button class="modalClose" id="closePack" type="button">Close</button>
       </div>
 
+      <!-- ✅ IMPORTANT: id leadForm -->
       <form id="leadForm" method="POST" action="/api/lead">
         <div class="col6">
           <label>Work email</label>
@@ -255,12 +255,13 @@
         </div>
 
         <input type="hidden" name="source" value="landing-cloudflare" />
-        <input type="hidden" name="page" id="pageField" value="" />
+        <!-- ✅ page = URL réel -->
+        <input id="pageField" type="hidden" name="page" value="" />
 
-        <!-- Turnstile must be INSIDE the form -->
         <div class="col12">
           <div class="tsWrap">
-            <div class="cf-turnstile" data-sitekey="0x4AAAAAACKGWyHun_bp5vaW"></div>
+            <!-- ✅ Your site key -->
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAACKGH_2u3M4Bw007"></div>
           </div>
 
           <div class="actionsRow">
@@ -284,8 +285,8 @@
       </div>
 
       <div id="packError" style="display:none">
-        <div class="errorBox" id="errorText">
-          Oops — something went wrong. Please try again.
+        <div class="errorBox">
+          <span id="errorText">Oops — something went wrong. Please try again.</span>
         </div>
       </div>
 
@@ -296,121 +297,127 @@
     </div>
   </div>
 
-<script>
-(function () {
-  const openBtn = document.getElementById('openPack');
-  const modal = document.getElementById('packModal');
-  const closeBtn = document.getElementById('closePack');
+  <script>
+  (function () {
+    const openBtn = document.getElementById('openPack');
+    const modal = document.getElementById('packModal');
+    const closeBtn = document.getElementById('closePack');
 
-  const form = document.getElementById('leadForm');
-  const success = document.getElementById('packSuccess');
-  const errorBox = document.getElementById('packError');
-  const errorText = document.getElementById('errorText');
-  const closeAfter = document.getElementById('closeAfterSuccess');
+    const form = document.getElementById('leadForm');
+    const success = document.getElementById('packSuccess');
+    const errorBox = document.getElementById('packError');
+    const errorText = document.getElementById('errorText');
+    const closeAfter = document.getElementById('closeAfterSuccess');
 
-  const submitBtn = document.getElementById('submitBtn');
-  const submitOriginal = submitBtn ? submitBtn.textContent : 'Send';
+    const submitBtn = document.getElementById('submitBtn');
+    const submitOriginal = submitBtn ? submitBtn.textContent : 'Send';
 
-  const pageField = document.getElementById('pageField');
-  if (pageField) pageField.value = location.href;
-
-  function resetModalState() {
-    if (form) form.style.display = 'grid';
-    if (success) success.style.display = 'none';
-    if (errorBox) errorBox.style.display = 'none';
-    if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = submitOriginal; }
-  }
-
-  function openModal() {
-    if (!modal) return;
-    resetModalState();
-    modal.classList.add('open');
-    document.body.classList.add('modalOpen');
-    modal.setAttribute('aria-hidden', 'false');
-    const first = modal.querySelector('input, select, textarea, button');
-    if (first) setTimeout(() => first.focus(), 0);
-  }
-
-  function closeModal() {
-    if (!modal) return;
-    modal.classList.remove('open');
-    document.body.classList.remove('modalOpen');
-    modal.setAttribute('aria-hidden', 'true');
-  }
-
-  openBtn && openBtn.addEventListener('click', function (e) {
-    e.preventDefault();
-    openModal();
-  });
-
-  closeBtn && closeBtn.addEventListener('click', closeModal);
-  closeAfter && closeAfter.addEventListener('click', closeModal);
-
-  modal && modal.addEventListener('click', function (e) {
-    if (e.target === modal) closeModal();
-  });
-
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') closeModal();
-  });
-
-  form && form.addEventListener('submit', async function (e) {
-    e.preventDefault();
-
-    if (errorBox) errorBox.style.display = 'none';
-    if (success) success.style.display = 'none';
+    const pageField = document.getElementById('pageField');
     if (pageField) pageField.value = location.href;
 
-    // Turnstile token exists only after user completes widget
-    const tsToken = document.querySelector('[name="cf-turnstile-response"]')?.value || "";
-    if (!tsToken) {
-      if (errorText) errorText.textContent = "Please complete the anti-bot check (Turnstile) and try again.";
-      if (errorBox) errorBox.style.display = 'block';
-      return;
-    }
-
-    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Sending…'; }
-
-    try {
-      const res = await fetch(form.action, {
-        method: 'POST',
-        body: new FormData(form),
-        headers: { 'Accept': 'application/json' }
-      });
-
-      if (res.ok) {
-        form.reset();
-        form.style.display = 'none';
-        if (success) success.style.display = 'block';
-
-        // Reset Turnstile widget (safe)
-        try { if (window.turnstile) window.turnstile.reset(); } catch(e) {}
-      } else {
-        let msg = "Oops — something went wrong. Please try again.";
-        try {
-          const j = await res.json();
-          if (j && j.error) msg = String(j.error);
-        } catch(e) {}
-        if (errorText) errorText.textContent = msg;
-        if (errorBox) errorBox.style.display = 'block';
-
-        try { if (window.turnstile) window.turnstile.reset(); } catch(e) {}
-      }
-    } catch (err) {
-      if (errorText) errorText.textContent = "Network error. Please try again.";
-      if (errorBox) errorBox.style.display = 'block';
-      try { if (window.turnstile) window.turnstile.reset(); } catch(e) {}
-    } finally {
+    function resetModalState() {
+      if (form) form.style.display = 'grid';
+      if (success) success.style.display = 'none';
+      if (errorBox) errorBox.style.display = 'none';
       if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = submitOriginal; }
     }
-  });
 
-  if (location.hash === '#form') {
-    openModal();
-    history.replaceState(null, '', location.pathname + location.search);
-  }
-})();
-</script>
+    function openModal() {
+      if (!modal) return;
+      resetModalState();
+      modal.classList.add('open');
+      document.body.classList.add('modalOpen');
+      modal.setAttribute('aria-hidden', 'false');
+      const first = modal.querySelector('input, select, textarea, button');
+      if (first) setTimeout(() => first.focus(), 0);
+    }
 
+    function closeModal() {
+      if (!modal) return;
+      modal.classList.remove('open');
+      document.body.classList.remove('modalOpen');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+
+    openBtn && openBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      openModal();
+    });
+
+    closeBtn && closeBtn.addEventListener('click', closeModal);
+    closeAfter && closeAfter.addEventListener('click', closeModal);
+
+    modal && modal.addEventListener('click', function (e) {
+      if (e.target === modal) closeModal();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // ✅ REAL submit: success only if server returns {ok:true}
+    form && form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      if (errorBox) errorBox.style.display = 'none';
+      if (success) success.style.display = 'none';
+
+      if (pageField) pageField.value = location.href;
+
+      const tsToken =
+        document.querySelector('[name="cf-turnstile-response"]')?.value ||
+        '';
+
+      if (!tsToken) {
+        if (errorText) errorText.textContent = "Complete the anti-bot check (Turnstile) then try again.";
+        if (errorBox) errorBox.style.display = 'block';
+        return;
+      }
+
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Sending…'; }
+
+      try {
+        const data = new FormData(form);
+
+        // send token under the name your backend expects
+        data.set("turnstile", tsToken);
+
+        const res = await fetch("/api/lead", {
+          method: "POST",
+          body: data
+        });
+
+        let j = null;
+        try { j = await res.json(); } catch(_) {}
+
+        console.log("api/lead:", res.status, j);
+
+        if (res.ok && j && j.ok === true) {
+          form.reset();
+          form.style.display = 'none';
+          if (success) success.style.display = 'block';
+          try { window.turnstile?.reset?.(); } catch(_) {}
+        } else {
+          const msg = (j && (j.error || j.message)) ? String(j.error || j.message) : "Server error. Please try again.";
+          if (errorText) errorText.textContent = msg;
+          if (errorBox) errorBox.style.display = 'block';
+          try { window.turnstile?.reset?.(); } catch(_) {}
+        }
+      } catch (err) {
+        if (errorText) errorText.textContent = "Network error. Please try again.";
+        if (errorBox) errorBox.style.display = 'block';
+        try { window.turnstile?.reset?.(); } catch(_) {}
+      } finally {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = submitOriginal; }
+      }
+    });
+
+    // /#form opens modal
+    if (location.hash === '#form') {
+      openModal();
+      history.replaceState(null, '', location.pathname + location.search);
+    }
+  })();
+  </script>
 </body>
 </html>
