@@ -1,24 +1,27 @@
 export async function onRequestPost({ request, env }) {
   try {
+    // 1) Parse body (supports FormData + urlencoded)
     const contentType = request.headers.get("content-type") || "";
+    let get = (k) => "";
 
-    // parse body (URLSearchParams)
-    let params;
-    if (contentType.includes("application/x-www-form-urlencoded")) {
-      const text = await request.text();
-      params = new URLSearchParams(text);
+    if (contentType.includes("multipart/form-data")) {
+      const fd = await request.formData();
+      get = (k) => String(fd.get(k) || "").trim();
     } else {
-      // fallback
       const text = await request.text();
-      params = new URLSearchParams(text);
+      const params = new URLSearchParams(text);
+      get = (k) => String(params.get(k) || "").trim();
     }
 
-    const token = (params.get("turnstile") || "").trim();
-    if (!token) {
-      return json({ ok: false, error: "Missing Turnstile token" }, 400);
+    // 2) Turnstile token (FormData uses cf-turnstile-response)
+    const token = get("cf-turnstile-response") || get("turnstile");
+    if (!token) return json({ ok: false, error: "Missing Turnstile token" }, 400);
+
+    if (!env.TURNSTILE_SECRET_KEY) {
+      return json({ ok: false, error: "Server misconfig: TURNSTILE_SECRET_KEY missing" }, 500);
     }
 
-    // Verify Turnstile
+    // 3) Verify Turnstile
     const ip = request.headers.get("CF-Connecting-IP") || "";
     const verifyRes = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
       method: "POST",
@@ -35,17 +38,48 @@ export async function onRequestPost({ request, env }) {
       return json({ ok: false, error: "Turnstile failed", details: verify }, 403);
     }
 
-    // ---- Continue your existing lead logic here ----
-    // Example: read fields
-    const work_email = (params.get("work_email") || "").trim();
-    const company = (params.get("company") || "").trim();
-    const compliance = (params.get("compliance") || "").trim();
-    const pain = (params.get("pain") || "").trim();
-    const source = (params.get("source") || "").trim();
-    const page = (params.get("page") || "").trim();
+    // 4) Read fields
+    const work_email = get("work_email");
+    const company = get("company");
+    const compliance = get("compliance");
+    const pain = get("pain");
+    const source = get("source");
+    const page = get("page");
 
-    // TODO: your Telegram send (existing)
-    // await sendTelegram(env, message)
+    // basic validation
+    if (!work_email || !work_email.includes("@")) {
+      return json({ ok: false, error: "Invalid work email" }, 400);
+    }
+    if (!company) return json({ ok: false, error: "Company is required" }, 400);
+    if (!compliance) return json({ ok: false, error: "Compliance is required" }, 400);
+    if (!pain) return json({ ok: false, error: "Pain is required" }, 400);
+
+    // 5) Send Telegram (if configured)
+    if (env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID) {
+      const msg =
+`🛡️ New Aegis lead
+🏢 Company: ${company}
+📧 Email: ${work_email}
+✅ Compliance: ${compliance}
+😣 Pain: ${pain}
+🔎 Source: ${source || "landing"}
+🔗 Page: ${page || ""}
+🕒 ${new Date().toISOString()}`;
+
+      const tgRes = await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          chat_id: env.TELEGRAM_CHAT_ID,
+          text: msg
+        })
+      });
+
+      const tg = await tgRes.json();
+      if (!tg.ok) {
+        return json({ ok: false, error: "Telegram failed", details: tg }, 500);
+      }
+    }
 
     return json({ ok: true, verified: true });
   } catch (e) {
