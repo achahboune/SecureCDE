@@ -25,3 +25,25 @@ This document defines the official design language.
 
 ## Gradient
 
+linear-gradient(135deg, #2F6BFF 0%, #00E5FF 45%, #2EE59D 100%)
+
+
+---
+
+## Typography
+
+| Usage | Font |
+|-----|-----|
+| Headings | Inter |
+| Body | Inter |
+| Fallback | system-ui, sans-serif |
+
+---
+
+## Tone
+
+- Secure  
+- Calm  
+- Technical  
+- Minimal  
+- Enterprise-grade
