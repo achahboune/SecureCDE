@@ -1,58 +1,62 @@
 # Aegis Cloud
 
 **Compliance-ready Cloud Dev Environments**  
-Onboard engineers in minutes. Audit-ready. **No DevOps required.** :contentReference[oaicite:1]{index=1}
+Onboard engineers in minutes. Audit-ready. **No DevOps required.**
 
-🔗 Live: https://aegiscloud-eta.vercel.app/ :contentReference[oaicite:2]{index=2}
+🔗 Live: https://aegiscloud-eta.vercel.app/
 
 ---
 
 ## What Aegis does
 
 Aegis provides **audit-ready developer workspaces for regulated teams** so you can:
-- reduce onboarding from days to minutes
-- avoid “works on my machine” drift :contentReference[oaicite:3]{index=3}
-- keep dev/prod parity for secrets, IAM, and auth :contentReference[oaicite:4]{index=4}
+
+- Reduce onboarding from days to minutes  
+- Eliminate “works on my machine” drift  
+- Keep dev/prod parity for secrets, IAM, and authentication  
 
 ---
 
 ## Built for regulated orgs
 
-Aegis is designed for teams in:
-- Healthcare / Fintech / Government contractors :contentReference[oaicite:5]{index=5}
-- Teams blocked from Codespaces/Gitpod due to compliance :contentReference[oaicite:6]{index=6}
-- Teams that can’t run Coder self-hosted :contentReference[oaicite:7]{index=7}
+Aegis is designed for:
+
+- Healthcare SaaS  
+- Fintech SaaS  
+- Government contractors  
+- Teams blocked from Codespaces / Gitpod  
+- Teams that can’t run Coder self-hosted  
 
 ---
 
 ## Core capabilities
 
-- SSO/SAML (Okta / Azure AD) :contentReference[oaicite:8]{index=8}
-- RBAC + audit logs :contentReference[oaicite:9]{index=9}
-- Data residency + egress controls :contentReference[oaicite:10]{index=10}
-- VPC / private networking option :contentReference[oaicite:11]{index=11}
-- Prebuilt workspaces from `devcontainer` :contentReference[oaicite:12]{index=12}
+- SSO / SAML (Okta, Azure AD)
+- Role-based access control (RBAC)
+- Immutable audit logs
+- Data residency & egress controls
+- VPC / private networking
+- Prebuilt dev environments from `devcontainer`
 
 ---
 
 ## Pilot package (what you get)
 
-- 1–2 reference workspaces :contentReference[oaicite:13]{index=13}
-- Security + compliance mapping pack :contentReference[oaicite:14]{index=14}
-- Cost controls + auto-shutdown policies :contentReference[oaicite:15]{index=15}
-- Onboarding flow: new hire → first commit :contentReference[oaicite:16]{index=16}
+- 1–2 secure reference workspaces  
+- Compliance mapping (SOC2 / HIPAA / FedRAMP)  
+- Cost controls & auto-shutdown policies  
+- Onboarding flow: new hire → first commit  
 
 ---
 
 ## Request the Security Pack
 
-CTA on the site: **Request Security Pack** :contentReference[oaicite:17]{index=17}  
-We only use your info to respond. “No calls. We reply by email within 24 hours.” :contentReference[oaicite:18]{index=18}
+Use the site CTA: **Request Security Pack**  
+No calls. We reply by email within 24 hours.
 
 ---
 
 ## Local development
 
-### Static preview
 ```bash
 npx serve .
