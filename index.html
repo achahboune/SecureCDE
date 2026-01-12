@@ -24,22 +24,35 @@
                   var(--bg);
       color:var(--text);
     }
+    body.modalOpen{overflow:hidden}
     a{color:inherit}
     .wrap{max-width:980px; margin:0 auto; padding:40px 18px 70px}
+
     .top{display:flex; gap:14px; align-items:center; justify-content:space-between; margin-bottom:26px;}
-    .brand{font-weight:800; letter-spacing:.2px}
+    .brandGroup{display:flex; align-items:center; gap:10px; min-width:0;}
+    .logo{
+      width:30px; height:30px; border-radius:10px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.06);
+      display:block;
+    }
+    .brand{font-weight:800; letter-spacing:.2px; white-space:nowrap}
     .pill{font-size:12px; color:var(--muted); border:1px solid var(--line); padding:8px 10px; border-radius:999px;}
+
     .hero{border:1px solid var(--line); background:rgba(15,23,51,.75); border-radius:var(--radius); padding:28px;}
     h1{margin:0 0 10px; font-size:34px; line-height:1.1}
     .sub{margin:0 0 18px; color:var(--muted); font-size:16px}
     .ctaRow{display:flex; gap:10px; flex-wrap:wrap}
+
     .btn{
       display:inline-flex; align-items:center; justify-content:center;
       padding:12px 14px; border-radius:12px; border:1px solid var(--line);
       text-decoration:none; font-weight:700; cursor:pointer;
+      background:transparent; color:inherit;
     }
     .btn.primary{background:var(--btn); color:var(--btnText); border-color:transparent}
     .btn.secondary{background:transparent}
+
     .grid{display:grid; gap:14px; margin-top:14px; grid-template-columns: repeat(12, 1fr);}
     .card{
       grid-column: span 6;
@@ -50,14 +63,40 @@
     ul{margin:0; padding-left:18px; color:var(--muted)}
     li{margin:8px 0}
 
-    .formCard{
-      grid-column: span 12;
-      border:1px solid rgba(122,162,255,.35);
-      background: linear-gradient(180deg, rgba(122,162,255,.12), rgba(15,23,51,.65));
-      border-radius:var(--radius); padding:18px;
+    /* Modal */
+    .modalOverlay{
+      position:fixed; inset:0; z-index:9999;
+      background:rgba(0,0,0,.55);
+      backdrop-filter: blur(8px);
+      display:none;
+      align-items:center; justify-content:center;
+      padding:18px;
     }
-    .formTitle{margin:0 0 10px; font-size:18px}
-    .formSub{margin:0 0 12px; color:var(--muted); font-size:14px}
+    .modalOverlay.open{display:flex}
+    .modal{
+      width:min(720px, 100%);
+      border:1px solid rgba(122,162,255,.35);
+      background: linear-gradient(180deg, rgba(122,162,255,.12), rgba(15,23,51,.88));
+      border-radius:var(--radius);
+      padding:18px;
+      box-shadow: 0 12px 55px rgba(0,0,0,.45);
+    }
+    .modalHeader{
+      display:flex; align-items:flex-start; justify-content:space-between;
+      gap:14px; margin-bottom:12px;
+    }
+    .formTitle{margin:0 0 6px; font-size:18px}
+    .formSub{margin:0; color:var(--muted); font-size:14px}
+    .iconBtn{
+      appearance:none; border:1px solid var(--line);
+      background:rgba(11,16,32,.35);
+      color:var(--text);
+      border-radius:12px;
+      height:38px; width:38px;
+      display:inline-flex; align-items:center; justify-content:center;
+      cursor:pointer;
+    }
+
     form{display:grid; gap:10px; grid-template-columns: repeat(12, 1fr);}
     label{font-size:12px; color:#cfd7f5; display:block; margin-bottom:6px}
     input, select, textarea{
@@ -70,14 +109,26 @@
     .col6{grid-column: span 6}
     .col12{grid-column: span 12}
     .hint{font-size:12px; color:var(--muted); margin-top:8px}
+    .success{
+      margin-top:10px;
+      border:1px solid rgba(122,255,210,.25);
+      background:rgba(122,255,210,.10);
+      padding:12px 12px;
+      border-radius:12px;
+      color:#dffcf2;
+      display:none;
+    }
+
     .footer{
-      margin-top:18px; color:var(--muted); font-size:12px;
+      margin-top:22px; color:var(--muted); font-size:12px;
       display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;
     }
+
     @media (max-width:720px){
       .card{grid-column: span 12}
       .col6{grid-column: span 12}
       h1{font-size:28px}
+      .pill{display:none}
     }
   </style>
 </head>
@@ -85,7 +136,10 @@
 <body>
   <div class="wrap">
     <div class="top">
-      <div class="brand">Aegis</div>
+      <div class="brandGroup">
+        <img class="logo" src="/favicon.ico" alt="Aegis logo" />
+        <div class="brand">Aegis</div>
+      </div>
       <div class="pill">Audit-ready • No DevOps required</div>
     </div>
 
@@ -94,7 +148,7 @@
       <p class="sub">Onboard engineers in minutes. Audit-ready. No DevOps required.</p>
 
       <div class="ctaRow">
-        <a class="btn primary" href="#form">Request Security Pack</a>
+        <button class="btn primary" id="openPack" type="button">Request Security Pack</button>
       </div>
     </section>
 
@@ -137,65 +191,152 @@
           <li>Onboarding flow: new hire → first commit</li>
         </ul>
       </div>
-
-      <!-- FORM (MINIMUM FIELDS) -->
-      <div class="formCard" id="form">
-        <h3 class="formTitle">Request the Security Pack</h3>
-        <p class="formSub">No calls. We reply by email within 24 hours.</p>
-
-        <form method="POST" action="https://formspree.io/f/xeeqjzrn">
-          <div class="col6">
-            <label>Work email</label>
-            <input name="work_email" type="email" placeholder="name@company.com" required />
-          </div>
-
-          <div class="col6">
-            <label>Company</label>
-            <input name="company" type="text" placeholder="Company name" required />
-          </div>
-
-          <div class="col6">
-            <label>Compliance (pick one)</label>
-            <select name="compliance" required>
-              <option value="" disabled selected>Select</option>
-              <option>HIPAA</option>
-              <option>FedRAMP</option>
-              <option>SOC2</option>
-              <option>PCI</option>
-              <option>Other</option>
-            </select>
-          </div>
-
-          <div class="col6">
-            <label>Team size</label>
-            <select name="team_size" required>
-              <option value="" disabled selected>Select</option>
-              <option>10–50</option>
-              <option>50–200</option>
-              <option>200+</option>
-            </select>
-          </div>
-
-          <div class="col12">
-            <label>Quick note (optional)</label>
-            <textarea name="note" placeholder="What is breaking onboarding today? (optional)"></textarea>
-          </div>
-
-          <input type="hidden" name="source" value="landing-vercel" />
-          <input type="hidden" name="page" value="aegis" />
-
-          <div class="col12">
-            <button class="btn primary" type="submit">Send</button>
-            <div class="hint">Tip: if you want a pilot, write “pilot” in the note.</div>
-          </div>
-        </form>
-
-        <div class="footer">
-          <span>Privacy: we only use your info to respond.</span>
-          <span>© 2026 Aegis</span>
-        </div>
-      </div>
     </section>
+
+    <div class="footer">
+      <span>Privacy: we only use your info to respond.</span>
+      <span>© 2026 Aegis</span>
+    </div>
   </div>
+
+  <!-- Modal: Security Pack form -->
+  <div class="modalOverlay" id="packModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="packTitle">
+      <div class="modalHeader">
+        <div>
+          <h3 class="formTitle" id="packTitle">Request the Security Pack</h3>
+          <p class="formSub">No calls. We reply by email within 24 hours.</p>
+        </div>
+        <button class="iconBtn" type="button" id="closeModal" aria-label="Close">✕</button>
+      </div>
+
+      <form id="packForm" method="POST" action="https://formspree.io/f/xeeqjzrn">
+        <div class="col6">
+          <label>Work email</label>
+          <input name="work_email" type="email" placeholder="name@company.com" required />
+        </div>
+
+        <div class="col6">
+          <label>Company</label>
+          <input name="company" type="text" placeholder="Company name" required />
+        </div>
+
+        <div class="col6">
+          <label>Compliance (pick one)</label>
+          <select name="compliance" required>
+            <option value="" disabled selected>Select</option>
+            <option>HIPAA</option>
+            <option>FedRAMP</option>
+            <option>SOC2</option>
+            <option>PCI</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="col6">
+          <label>Team size</label>
+          <select name="team_size" required>
+            <option value="" disabled selected>Select</option>
+            <option>10–50</option>
+            <option>50–200</option>
+            <option>200+</option>
+          </select>
+        </div>
+
+        <div class="col12">
+          <label>Quick note (optional)</label>
+          <textarea name="note" placeholder="What is breaking onboarding today? (optional)"></textarea>
+        </div>
+
+        <input type="hidden" name="source" value="landing-vercel" />
+        <input type="hidden" name="page" value="aegis" />
+
+        <div class="col12">
+          <button class="btn primary" type="submit" id="submitBtn">Send</button>
+          <div class="hint">Tip: if you want a pilot, write “pilot” in the note.</div>
+          <div class="success" id="successMsg">Thanks — we’ll email you within 24 hours.</div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const openBtn = document.getElementById("openPack");
+      const overlay = document.getElementById("packModal");
+      const closeBtn = document.getElementById("closeModal");
+      const form = document.getElementById("packForm");
+      const submitBtn = document.getElementById("submitBtn");
+      const successMsg = document.getElementById("successMsg");
+      const firstField = form.querySelector('input[name="work_email"]');
+
+      function openModal() {
+        overlay.classList.add("open");
+        overlay.setAttribute("aria-hidden", "false");
+        document.body.classList.add("modalOpen");
+        successMsg.style.display = "none";
+        setTimeout(() => firstField && firstField.focus(), 30);
+      }
+
+      function closeModal() {
+        overlay.classList.remove("open");
+        overlay.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("modalOpen");
+        openBtn && openBtn.focus();
+      }
+
+      openBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        openModal();
+      });
+
+      closeBtn.addEventListener("click", closeModal);
+
+      overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) closeModal();
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && overlay.classList.contains("open")) closeModal();
+      });
+
+      // AJAX submit (keeps the user on the page)
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        submitBtn.disabled = true;
+        const prevText = submitBtn.textContent;
+        submitBtn.textContent = "Sending…";
+
+        try {
+          const res = await fetch(form.action, {
+            method: "POST",
+            body: new FormData(form),
+            headers: { "Accept": "application/json" }
+          });
+
+          if (res.ok) {
+            form.reset();
+            successMsg.style.display = "block";
+            setTimeout(() => {
+              successMsg.style.display = "none";
+              closeModal();
+            }, 1400);
+          } else {
+            let data = null;
+            try { data = await res.json(); } catch (_) {}
+            const msg = (data && data.errors && data.errors[0] && data.errors[0].message)
+              ? data.errors[0].message
+              : "Something went wrong. Please try again.";
+            alert(msg);
+          }
+        } catch (err) {
+          alert("Network error. Please try again.");
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = prevText;
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
