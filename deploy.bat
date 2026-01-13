@@ -18,21 +18,33 @@ where git >nul 2>&1 || (
 set "MSG=%~1"
 if "%MSG%"=="" set "MSG=update"
 
-echo [1/3] Staging changes...
+echo [0/4] Sync with remote (rebase)...
+git fetch %REMOTE% %BRANCH% >nul 2>&1
+git pull --rebase %REMOTE% %BRANCH%
+if errorlevel 1 (
+  echo ERROR: Rebase failed. Resolve conflicts then run:
+  echo   git status
+  echo   git add -A
+  echo   git rebase --continue
+  goto done_err
+)
+
+echo [1/4] Staging changes...
 git add -A
 
 git diff --cached --quiet
 if errorlevel 1 (
-  echo [2/3] Commit: %MSG%
+  echo [2/4] Commit: %MSG%
   git commit -m "%MSG%" || goto done_err
 ) else (
-  echo [2/3] No changes to commit.
+  echo [2/4] No changes to commit.
 )
 
-echo [3/3] Push to GitHub (Vercel auto-deploy)...
-git push %REMOTE% %BRANCH% || goto done_err
+echo [3/4] Push to GitHub (Cloudflare Pages auto-deploy)...
+git push %REMOTE% %BRANCH%
+if errorlevel 1 goto done_err
 
-echo DONE — Vercel is deploying 🚀
+echo DONE — Cloudflare Pages is deploying 🚀
 goto done_ok
 
 :done_err
