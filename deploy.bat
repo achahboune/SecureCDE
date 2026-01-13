@@ -1,5 +1,5 @@
 @echo off
-setlocal EnableExtensions EnableDelayedExpansion
+setlocal
 pushd "%~dp0" >nul
 
 set "REMOTE=origin"
@@ -18,17 +18,6 @@ where git >nul 2>&1 || (
 set "MSG=%~1"
 if "%MSG%"=="" set "MSG=update"
 
-echo [0/4] Sync with remote (rebase)...
-git fetch %REMOTE% %BRANCH% >nul 2>&1
-git pull --rebase %REMOTE% %BRANCH%
-if errorlevel 1 (
-  echo ERROR: Rebase failed. Resolve conflicts then run:
-  echo   git status
-  echo   git add -A
-  echo   git rebase --continue
-  goto done_err
-)
-
 echo [1/4] Staging changes...
 git add -A
 
@@ -40,11 +29,19 @@ if errorlevel 1 (
   echo [2/4] No changes to commit.
 )
 
-echo [3/4] Push to GitHub (Cloudflare Pages auto-deploy)...
-git push %REMOTE% %BRANCH%
-if errorlevel 1 goto done_err
+echo [3/4] Sync with remote (rebase)...
+git pull --rebase %REMOTE% %BRANCH%
+if errorlevel 1 (
+  echo ERROR: Rebase failed (conflicts). Run:
+  echo   git status
+  echo   resolve files, then: git add -A ^&^& git rebase --continue
+  goto done_err
+)
 
-echo DONE — Cloudflare Pages is deploying 🚀
+echo [4/4] Push to GitHub (Cloudflare Pages auto-deploy)...
+git push %REMOTE% %BRANCH% || goto done_err
+
+echo DONE — GitHub updated; Cloudflare Pages will deploy 🚀
 goto done_ok
 
 :done_err
