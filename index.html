@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Aegiscloud — Compliance-Ready Cloud Dev Environments</title>
-  <meta name="description" content="Onboard engineers in minutes. Audit-ready. No DevOps required." />
+  <title>aegiscloud — Compliance-Ready Cloud Dev Environments</title>
+  <meta name="description" content="Compliance-ready cloud dev environments for regulated engineering teams." />
 
   <!-- Favicon -->
   <link rel="icon" href="/favicon.ico" sizes="any">
@@ -186,21 +186,27 @@
   <div class="wrap">
     <div class="top">
       <div class="brandGroup">
-        <img class="logo" src="/favicon.ico" alt="Aegiscloud logo" />
-        <div class="brand">Aegiscloud</div>
+        <svg class="logo" width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2l8 4v6c0 6-3.4 9.9-8 12-4.6-2.1-8-6-8-12V6l8-4z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M12 6.5l4 2v3.8c0 3.5-1.9 5.8-4 7-2.1-1.2-4-3.5-4-7V8.5l4-2z" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".55"/>
+        </svg>
+        <div class="brand">aegiscloud</div>
       </div>
       <div class="pill">Audit-ready • No DevOps required</div>
     </div>
 
     <section class="hero">
-      <h1>Compliance-Ready Cloud Dev Environments</h1>
-      <p class="sub">Onboard engineers in minutes. Audit-ready. No DevOps required.</p>
+      <h1>Your developers are blocked by compliance.<br>We unblock them in 24 hours.</h1>
+<p class="sub">
+Audit-ready cloud dev environments for HIPAA, SOC 2, FedRAMP & regulated teams.
+</p>
+
 
       <div class="ctaRow">
         <button class="btn primary" id="openPack" type="button">Request Security Pack</button>
       </div>
 <div class="trustBadges" aria-label="Trust and compliance features">
-  <span class="badge soc2">
+  <span class="badge soc2" title="SOC 2 controls + evidence pack (audit-ready)">
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path d="M12 22s8-4 8-10V6l-8-3-8 3v6c0 6 8 10 8 10Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
       <path d="m9 12 2 2 4-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -208,7 +214,7 @@
     <span class="label">SOC 2 Ready</span>
   </span>
 
-  <span class="badge hipaa">
+  <span class="badge hipaa" title="HIPAA-aligned safeguards for regulated workloads">
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path d="M20 8.5c0 5-8 11.5-8 11.5S4 13.5 4 8.5C4 6 6 4 8.5 4c1.5 0 2.9.7 3.5 1.8C12.6 4.7 14 4 15.5 4 18 4 20 6 20 8.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
       <path d="M3 13h4l2-4 3 8 2-4h5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -216,7 +222,7 @@
     <span class="label">HIPAA Aligned</span>
   </span>
 
-  <span class="badge fedramp">
+  <span class="badge fedramp" title="FedRAMP path: baseline controls + documentation">
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path d="M12 2l2 4 4 .5-3 3 .7 4.2-3.7-2-3.7 2 .7-4.2-3-3 4-.5 2-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
       <path d="M8.5 14.5 7 22l5-3 5 3-1.5-7.5" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
@@ -224,7 +230,7 @@
     <span class="label">FedRAMP Path</span>
   </span>
 
-  <span class="badge sso">
+  <span class="badge sso" title="Single sign-on via Okta / Azure AD (SAML)">
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path d="M15 7a5 5 0 1 1-9 3 5 5 0 0 1 9-3Z" stroke="currentColor" stroke-width="2"/>
       <path d="M10 10h12v4h-3v3h-3v3h-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -232,7 +238,7 @@
     <span class="label">SSO / SAML</span>
   </span>
 
-  <span class="badge audit">
+  <span class="badge audit" title="Immutable audit logs for access & actions">
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path d="M6 4h11a2 2 0 0 1 2 2v14H8a2 2 0 0 1-2-2V4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
       <path d="M6 17a2 2 0 0 0 2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -241,7 +247,7 @@
     <span class="label">Audit Logs</span>
   </span>
 
-  <span class="badge vpc">
+  <span class="badge vpc" title="Private networking / VPC isolation option">
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path d="M12 2v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
       <path d="M5 7h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -253,6 +259,27 @@
 </div>
 
     </section>
+<section class="grid">
+  <div class="card">
+    <h2>Without Aegiscloud</h2>
+    <ul>
+      <li>Onboarding takes 3–14 days</li>
+      <li>Local machines & shadow IT</li>
+      <li>Audits are painful & slow</li>
+      <li>Security teams block releases</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>With Aegiscloud</h2>
+    <ul>
+      <li>Onboarding in 15 minutes</li>
+      <li>Fully controlled cloud workspaces</li>
+      <li>Instant audit evidence</li>
+      <li>Security teams say yes</li>
+    </ul>
+  </div>
+</section>
 
     <section class="grid">
       <div class="card">
@@ -297,9 +324,30 @@
 
     <div class="footer">
       <span>Privacy: we only use your info to respond.</span>
-      <span>© 2026 Aegiscloud</span>
+      <span>© 2026 aegiscloud</span>
     </div>
   </div>
+<section class="hero" style="margin-top:28px">
+  <h2>Pilot program</h2>
+  <p class="sub">
+  Launch Aegiscloud with your team in 30 days.
+  </p>
+
+  <ul style="color:var(--muted)">
+    <li>Up to 25 engineers</li>
+    <li>Private cloud workspaces</li>
+    <li>Security & compliance mapping pack</li>
+    <li>Onboarding flow: new hire → first commit</li>
+    <li>Direct founder support</li>
+  </ul>
+
+  <p style="font-weight:800;margin-top:10px">$750 – $1,500 (one-time pilot)</p>
+
+  <div class="ctaRow">
+    <button class="btn primary" onclick="document.getElementById('openPack').click()">Apply for pilot</button>
+  </div>
+</section>
+
 
   <!-- Modal: Security Pack form -->
   <div class="modalOverlay" id="packModal" aria-hidden="true">
@@ -307,12 +355,12 @@
       <div class="modalHeader">
         <div>
           <h3 class="formTitle" id="packTitle">Request the Security Pack</h3>
-          <p class="formSub">No calls. We reply by email within 24 hours.</p>
+          <p class="formSub" id="replyNote" style="opacity:0; transform: translateY(-4px);">We reply by email within 24 hours.</p>
         </div>
         <button class="iconBtn" type="button" id="closeModal" aria-label="Close">✕</button>
       </div>
 
-      <form id="packForm" method="POST" action="https://formspree.io/f/xeeqjzrn">
+      <form id="packForm" method="POST" action="https://api.aegiscloud.site/api/pack" enctype="application/x-www-form-urlencoded">
         <div class="col6">
           <label>Work email</label>
           <input name="work_email" type="email" placeholder="name@company.com" required />
@@ -350,95 +398,154 @@
           <textarea name="note" placeholder="What is breaking onboarding today? (optional)"></textarea>
         </div>
 
-        <input type="hidden" name="source" value="landing-vercel" />
+        <div class="col12" style="display:none">
+          <label>Website</label>
+          <input name="website" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+
+
+        <input type="hidden" name="source" value="landing-cloudflare" />
         <input type="hidden" name="page" value="aegis" />
 
         <div class="col12">
           <button class="btn primary" type="submit" id="submitBtn">Send</button>
           <div class="hint">Tip: if you want a pilot, write “pilot” in the note.</div>
-          <div class="success" id="successMsg">Thanks — we’ll email you within 24 hours.</div>
+          <div class="success" id="successMsg">Thanks — we’ll reply by email within 24 hours.</div>
         </div>
       </form>
     </div>
   </div>
 
   <script>
-    (function () {
-      const openBtn = document.getElementById("openPack");
-      const overlay = document.getElementById("packModal");
-      const closeBtn = document.getElementById("closeModal");
-      const form = document.getElementById("packForm");
-      const submitBtn = document.getElementById("submitBtn");
-      const successMsg = document.getElementById("successMsg");
-      const firstField = form.querySelector('input[name="work_email"]');
+  (function () {
+    const openBtn = document.getElementById("openPack");
+    const modal = document.getElementById("packModal");
+    const overlay = document.getElementById("modalOverlay");
+    const closeBtn = document.getElementById("closeModal");
+    const form = document.getElementById("packForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const successMsg = document.getElementById("successMsg");
+    const errorMsg = document.getElementById("errorMsg");
+    const replyNote = document.getElementById("replyNote");
+    const firstField = form ? form.querySelector('input[name="work_email"]') : null;
 
-      function openModal() {
-        overlay.classList.add("open");
-        overlay.setAttribute("aria-hidden", "false");
-        document.body.classList.add("modalOpen");
-        successMsg.style.display = "none";
-        setTimeout(() => firstField && firstField.focus(), 30);
+    let replyTimer = null;
+
+    function resetDelayedNote() {
+      if (!replyNote) return;
+      if (replyTimer) {
+        clearTimeout(replyTimer);
+        replyTimer = null;
       }
+      replyNote.style.opacity = "0";
+      replyNote.style.transform = "translateY(-4px)";
+    }
 
-      function closeModal() {
-        overlay.classList.remove("open");
-        overlay.setAttribute("aria-hidden", "true");
-        document.body.classList.remove("modalOpen");
-        openBtn && openBtn.focus();
-      }
+    function showDelayedNote() {
+      if (!replyNote) return;
+      replyTimer = setTimeout(() => {
+        replyNote.style.transition = "opacity .25s ease, transform .25s ease";
+        replyNote.style.opacity = "1";
+        replyNote.style.transform = "translateY(0)";
+      }, 3000);
+    }
 
-      openBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        openModal();
-      });
+    function openModal() {
+      if (!modal) return;
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.classList.add("modalOpen");
 
-      closeBtn.addEventListener("click", closeModal);
+      if (successMsg) successMsg.style.display = "none";
+      if (errorMsg) errorMsg.style.display = "none";
 
-      overlay.addEventListener("click", (e) => {
-        if (e.target === overlay) closeModal();
-      });
+      resetDelayedNote();
+      showDelayedNote();
 
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && overlay.classList.contains("open")) closeModal();
-      });
+      setTimeout(() => firstField && firstField.focus(), 50);
+    }
 
-      // AJAX submit (keeps the user on the page)
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
+    function closeModal() {
+      if (!modal) return;
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("modalOpen");
+      resetDelayedNote();
+    }
+
+    openBtn && openBtn.addEventListener("click", openModal);
+    closeBtn && closeBtn.addEventListener("click", closeModal);
+
+    overlay && overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) closeModal();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modal && modal.classList.contains("open")) closeModal();
+    });
+
+    function serializeForm(formEl) {
+      const fd = new FormData(formEl);
+      // basic anti-spam: if honeypot filled, pretend success
+      if (fd.get("website")) return { honeypot: true, body: null };
+      const data = {};
+      fd.forEach((v, k) => (data[k] = v));
+      return { honeypot: false, body: JSON.stringify(data) };
+    }
+
+    form && form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      if (successMsg) successMsg.style.display = "none";
+      if (errorMsg) errorMsg.style.display = "none";
+
+      const prevText = submitBtn ? submitBtn.textContent : "";
+      if (submitBtn) {
         submitBtn.disabled = true;
-        const prevText = submitBtn.textContent;
         submitBtn.textContent = "Sending…";
+      }
 
-        try {
-          const res = await fetch(form.action, {
-            method: "POST",
-            body: new FormData(form),
-            headers: { "Accept": "application/json" }
-          });
-
-          if (res.ok) {
-            form.reset();
-            successMsg.style.display = "block";
-            setTimeout(() => {
-              successMsg.style.display = "none";
-              closeModal();
-            }, 1400);
-          } else {
-            let data = null;
-            try { data = await res.json(); } catch (_) {}
-            const msg = (data && data.errors && data.errors[0] && data.errors[0].message)
-              ? data.errors[0].message
-              : "Something went wrong. Please try again.";
-            alert(msg);
-          }
-        } catch (err) {
-          alert("Network error. Please try again.");
-        } finally {
-          submitBtn.disabled = false;
-          submitBtn.textContent = prevText;
+      try {
+        const payload = serializeForm(form);
+        if (payload.honeypot) {
+          if (successMsg) successMsg.style.display = "block";
+          if (submitBtn) submitBtn.textContent = "Sent ✓";
+          form.reset();
+          return;
         }
-      });
-    })();
-  </script>
+
+        const res = await fetch(form.action, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: payload.body,
+        });
+
+        if (res.ok) {
+          if (successMsg) successMsg.style.display = "block";
+          if (submitBtn) submitBtn.textContent = "Sent ✓";
+          form.reset();
+          // keep modal open so they see the confirmation
+        } else {
+          if (errorMsg) {
+            errorMsg.style.display = "block";
+            try {
+              const t = await res.text();
+              if (t) errorMsg.textContent = "Could not send — try again or email us directly.";
+            } catch (_) {}
+          }
+        }
+      } catch (err) {
+        if (errorMsg) errorMsg.style.display = "block";
+      } finally {
+        if (submitBtn) {
+          setTimeout(() => {
+            submitBtn.disabled = false;
+            submitBtn.textContent = prevText || "Get audit-ready in 24h";
+          }, 900);
+        }
+      }
+    });
+  })();
+</script>
 </body>
 </html>

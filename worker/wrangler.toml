@@ -1,0 +1,13 @@
+name = "aegiscloud-form"
+main = "src/index.js"
+compatibility_date = "2026-01-13"
+compatibility_flags = ["nodejs_compat"]
+
+# Optional: show recipient in the MIME headers (delivery is enforced by the binding)
+[vars]
+DEST_EMAIL = "achahboune@gmail.com"
+
+# Cloudflare Email Workers binding (required)
+[[send_email]]
+name = "EMAIL"
+destination_address = "achahboune@gmail.com"
