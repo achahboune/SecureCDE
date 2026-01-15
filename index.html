@@ -36,7 +36,16 @@
   border-radius:12px;
   background:none;
   border:none;
+  display:block;              /* évite les petits décalages */
+  object-fit:contain;         /* garde le logo propre */
 }
+
+.brandGroup{
+  display:flex;
+  align-items:center;         /* aligne logo + texte */
+  gap:14px;                   /* un peu plus d’air */
+}
+
     .brand{font-weight:800; letter-spacing:.2px; white-space:nowrap}
     .pill{font-size:12px; color:var(--muted); border:1px solid var(--line); padding:8px 10px; border-radius:999px;}
 
