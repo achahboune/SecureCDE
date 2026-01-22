@@ -10,165 +10,287 @@
 
   <style>
     :root{
-      --bg:#111c3f;              /* ⬅️ fond global plus clair */
-      --card:#0f1733;
+      /* ✅ Une seule couleur de fond, plus claire (premium, lisible) */
+      --bg:#16224a;
+
       --text:#e9eefc;
       --muted:#a9b4d6;
       --line:rgba(255,255,255,.12);
+
+      --card:rgba(15,23,51,.72);
+      --card2:rgba(15,23,51,.60);
+
       --btn:#ffffff;
       --btnText:#0b1020;
-      --accent:#7aa2ff;
+
       --radius:16px;
     }
 
     *{box-sizing:border-box}
+    html, body{height:100%}
     html{scroll-behavior:smooth}
 
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      background:
-        radial-gradient(1200px 700px at 30% -10%, rgba(122,162,255,.42), transparent 62%),
-        radial-gradient(900px 600px at 80% 10%, rgba(122,255,210,.22), transparent 62%),
-        radial-gradient(900px 700px at 40% 120%, rgba(122,162,255,.18), transparent 60%),
-        var(--bg);
+      background: var(--bg); /* ✅ 1 seule couleur */
       color:var(--text);
+      overflow:hidden; /* ✅ pas de scroll sur desktop */
     }
 
-    /* voile clair pour éclaircir sans toucher aux cards */
-    body::before{
-      content:"";
-      position:fixed;
-      inset:0;
-      z-index:-1;
-      pointer-events:none;
-      background:
-        radial-gradient(1100px 700px at 25% -10%, rgba(122,162,255,.22), transparent 62%),
-        radial-gradient(900px 600px at 80% 10%, rgba(122,255,210,.14), transparent 62%),
-        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0));
+    /* ✅ wrapper full height */
+    .wrap{
+      min-height:100vh;
+      max-width:980px;
+      margin:0 auto;
+      padding:28px 18px;
+      display:flex;
+      flex-direction:column;
     }
-
-    @media (max-width:720px){
-      body::before{
-        background:
-          radial-gradient(900px 520px at 35% -10%, rgba(122,162,255,.28), transparent 62%),
-          radial-gradient(800px 520px at 80% 10%, rgba(122,255,210,.16), transparent 62%),
-          linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0));
-      }
-    }
-
-    body.modalOpen{overflow:hidden}
-    a{color:inherit}
-
-    .wrap{max-width:980px; margin:0 auto; padding:40px 18px 70px}
 
     .top{
-      display:flex; gap:14px; align-items:center; justify-content:space-between;
-      margin-bottom:26px;
+      display:flex;
+      gap:14px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:16px;
+      flex:0 0 auto;
     }
 
     .brandGroup{
-      display:flex; align-items:center; gap:14px;
+      display:flex;
+      align-items:center;
+      gap:14px;
+      min-width:0;
     }
 
     .logo{
-      width:44px; height:44px;
+      width:44px;
+      height:44px;
       border-radius:12px;
       display:block;
       object-fit:contain;
     }
 
-    .brand{font-weight:800; letter-spacing:.2px; white-space:nowrap}
+    .brand{
+      font-weight:800;
+      letter-spacing:.2px;
+      white-space:nowrap;
+    }
 
     .pill{
-      font-size:12px; color:var(--muted);
+      font-size:12px;
+      color:var(--muted);
       border:1px solid var(--line);
-      padding:8px 10px; border-radius:999px;
-      background:transparent;
+      padding:8px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.03);
     }
 
-    .pillBtn{cursor:pointer}
-    .pillBtn:hover{background:rgba(255,255,255,.06)}
-
+    /* ✅ HERO full height (remplit l’écran) */
     .hero{
+      flex:1 1 auto;
       border:1px solid var(--line);
-      background:rgba(15,23,51,.75);
+      background: var(--card);
       border-radius:var(--radius);
-      padding:28px;
+      padding:24px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between; /* ✅ prend toute la hauteur */
+      gap:16px;
     }
 
-    h1{margin:0 0 10px; font-size:34px; line-height:1.1}
-    .sub{margin:0 0 18px; color:var(--muted); font-size:16px}
+    .heroMain{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
 
-    .ctaRow{display:flex; gap:10px; flex-wrap:wrap}
+    h1{
+      margin:0;
+      font-size:34px;
+      line-height:1.08;
+      letter-spacing:-0.2px;
+    }
+
+    .sub{
+      margin:0;
+      color:var(--muted);
+      font-size:16px;
+      line-height:1.45;
+    }
+
+    .ctaRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:6px;
+    }
 
     .btn{
-      display:inline-flex; align-items:center; justify-content:center;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
       padding:12px 14px;
       border-radius:12px;
       border:1px solid var(--line);
-      font-weight:700;
+      text-decoration:none;
+      font-weight:800;
       cursor:pointer;
       background:transparent;
       color:inherit;
     }
-
-    .btn.primary{background:var(--btn); color:var(--btnText); border-color:transparent}
+    .btn.primary{
+      background:var(--btn);
+      color:var(--btnText);
+      border-color:transparent;
+    }
+    .btn.secondary{background:transparent}
 
     /* Pilot teaser */
     .pilotTeaser{
-      margin-top:14px;
+      margin-top:10px;
       padding:12px 14px;
       border-radius:12px;
       border:1px solid rgba(255,255,255,.12);
       background: rgba(255,255,255,.04);
     }
-
-    .pilotTeaserTitle{font-weight:800; margin-bottom:4px}
-    .pilotTeaserSub{color:var(--muted); font-size:14px; line-height:1.35}
+    .pilotTeaserTitle{
+      font-weight:900;
+      margin-bottom:6px;
+    }
+    .pilotTeaserSub{
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.4;
+    }
     .pilotTeaserSub strong{color:var(--text)}
 
     /* Cards */
     .grid{
       display:grid;
       gap:14px;
-      margin-top:14px;
       grid-template-columns: repeat(12, 1fr);
     }
-
     .card{
       grid-column: span 6;
       border:1px solid var(--line);
-      background:rgba(15,23,51,.65);
+      background: var(--card2);
       border-radius:var(--radius);
-      padding:18px;
+      padding:16px;
     }
-
     .card h2{
       margin:0 0 10px;
-      font-size:14px;
-      letter-spacing:.4px;
+      font-size:13px;
+      letter-spacing:.5px;
       text-transform:uppercase;
       color:#cfd7f5;
     }
-
     ul{margin:0; padding-left:18px; color:var(--muted)}
     li{margin:8px 0}
 
-    @media (max-width:720px){
-      .card{grid-column: span 12}
-      h1{font-size:28px}
-      .pill{display:none}
-    }
-
     .footer{
-      margin-top:22px;
       color:var(--muted);
       font-size:12px;
       display:flex;
-      justify-content:space-between;
-      flex-wrap:wrap;
       gap:10px;
+      flex-wrap:wrap;
+      justify-content:space-between;
+      align-items:center;
+      padding-top:6px;
+    }
+
+    /* Modal */
+    body.modalOpen{overflow:hidden}
+
+    .modalOverlay{
+      position:fixed;
+      inset:0;
+      z-index:9999;
+      background:rgba(0,0,0,.55);
+      backdrop-filter: blur(8px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+    }
+    .modalOverlay.open{display:flex}
+
+    .modal{
+      width:min(720px, 100%);
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(15,23,51,.92);
+      border-radius:var(--radius);
+      padding:18px;
+      box-shadow: 0 12px 55px rgba(0,0,0,.45);
+    }
+
+    .modalHeader{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:14px;
+      margin-bottom:12px;
+    }
+    .formTitle{margin:0 0 6px; font-size:18px}
+    .formSub{margin:0; color:var(--muted); font-size:14px}
+
+    .iconBtn{
+      appearance:none;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      border-radius:12px;
+      height:38px;
+      width:38px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+    }
+
+    form{
+      display:grid;
+      gap:10px;
+      grid-template-columns: repeat(12, 1fr);
+    }
+    label{font-size:12px; color:#cfd7f5; display:block; margin-bottom:6px}
+
+    input, select, textarea{
+      width:100%;
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:rgba(11,16,32,.55);
+      color:var(--text);
+      outline:none;
+    }
+    textarea{min-height:90px; resize:vertical}
+    input::placeholder, textarea::placeholder{color:rgba(233,238,252,.55)}
+
+    .col6{grid-column: span 6}
+    .col12{grid-column: span 12}
+
+    .hint{font-size:12px; color:var(--muted); margin-top:8px}
+    .success{
+      margin-top:10px;
+      border:1px solid rgba(122,255,210,.25);
+      background:rgba(122,255,210,.10);
+      padding:12px 12px;
+      border-radius:12px;
+      color:#dffcf2;
+      display:none;
+    }
+
+    /* ✅ Mobile: on autorise le scroll sinon ça coupe */
+    @media (max-width:720px){
+      body{overflow:auto}
+      .wrap{padding:18px 14px}
+      h1{font-size:28px}
+      .pill{display:none}
+      .card{grid-column: span 12}
+      .col6{grid-column: span 12}
+      .hero{padding:18px}
     }
   </style>
 </head>
@@ -177,61 +299,266 @@
   <div class="wrap">
     <div class="top">
       <div class="brandGroup">
-        <img src="/favicon.ico" class="logo" alt="">
+        <img src="/favicon.ico" class="logo" alt="" />
         <div class="brand">aegiscloud</div>
       </div>
-      <div style="display:flex;gap:10px;align-items:center">
-        <div class="pill">Audit-ready • No DevOps required</div>
-        <button class="pill pillBtn" id="openPilotTop">Pilot program</button>
-      </div>
+
+      <!-- ✅ Pilot program en haut supprimé -->
+      <div class="pill">Audit-ready • No DevOps required</div>
     </div>
 
     <section class="hero">
-      <h1>Your developers are blocked by compliance.<br>We unblock them in 24 hours.</h1>
-      <p class="sub">Audit-ready cloud dev environments for HIPAA, SOC 2, FedRAMP & regulated teams.</p>
+      <div class="heroMain">
+        <h1>Your developers are blocked by compliance.<br>We unblock them in 24 hours.</h1>
+        <p class="sub">Audit-ready cloud dev environments for HIPAA, SOC 2, FedRAMP & regulated teams.</p>
 
-      <div class="ctaRow">
-        <button class="btn primary" id="openPack">Request Security Pack</button>
-        <button class="btn" id="openPilot">Apply for pilot program</button>
-      </div>
+        <div class="ctaRow">
+          <button class="btn primary" id="openPack" type="button">Request Security Pack</button>
+          <button class="btn secondary" id="openPilot" type="button">Apply for pilot program</button>
+        </div>
 
-      <div class="pilotTeaser">
-        <div class="pilotTeaserTitle">Pilot program — launch in 30 days</div>
-        <div class="pilotTeaserSub">
-          Up to 25 engineers · Private cloud workspaces · Security & compliance mapping pack ·
-          Onboarding: new hire → first commit · Direct founder support ·
-          <strong>$750–$1,500</strong>
+        <div class="pilotTeaser" role="note" aria-label="Pilot offer">
+          <div class="pilotTeaserTitle">Pilot program — launch in 30 days</div>
+          <div class="pilotTeaserSub">
+            Launch Aegiscloud with your team in 30 days.<br>
+            Up to 25 engineers · Private cloud workspaces · Security &amp; compliance mapping pack ·
+            Onboarding: new hire → first commit · Direct founder support ·
+            <strong>$750–$1,500</strong> (one-time pilot)
+          </div>
         </div>
       </div>
 
-      <!-- Cards -->
-      <section class="grid">
-        <div class="card">
-          <h2>Without Aegiscloud</h2>
-          <ul>
-            <li>Onboarding takes 3–14 days</li>
-            <li>Local machines & shadow IT</li>
-            <li>Audits are painful & slow</li>
-            <li>Security teams block releases</li>
-          </ul>
-        </div>
+      <div>
+        <section class="grid">
+          <div class="card">
+            <h2>Without Aegiscloud</h2>
+            <ul>
+              <li>Onboarding takes 3–14 days</li>
+              <li>Local machines & shadow IT</li>
+              <li>Audits are painful & slow</li>
+              <li>Security teams block releases</li>
+            </ul>
+          </div>
 
-        <div class="card">
-          <h2>With Aegiscloud</h2>
-          <ul>
-            <li>Onboarding in 15 minutes</li>
-            <li>Fully controlled cloud workspaces</li>
-            <li>Instant audit evidence</li>
-            <li>Security teams say yes</li>
-          </ul>
-        </div>
-      </section>
+          <div class="card">
+            <h2>With Aegiscloud</h2>
+            <ul>
+              <li>Onboarding in 15 minutes</li>
+              <li>Fully controlled cloud workspaces</li>
+              <li>Instant audit evidence</li>
+              <li>Security teams say yes</li>
+            </ul>
+          </div>
+        </section>
 
-      <div class="footer">
-        <span>Privacy: we only use your info to respond.</span>
-        <span>© 2026 aegiscloud</span>
+        <div class="footer">
+          <span>Privacy: we only use your info to respond.</span>
+          <span>© 2026 aegiscloud</span>
+        </div>
       </div>
     </section>
   </div>
+
+  <!-- Modal: one form for both CTAs -->
+  <div class="modalOverlay" id="packModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="packTitle">
+      <div class="modalHeader">
+        <div>
+          <h3 class="formTitle" id="packTitle">Request the Security Pack</h3>
+          <p class="formSub" id="replyNote" style="opacity:0; transform: translateY(-4px);">
+            We reply by email within 24 hours.
+          </p>
+        </div>
+        <button class="iconBtn" type="button" id="closeModal" aria-label="Close">✕</button>
+      </div>
+
+      <form id="packForm" method="POST" action="https://api.aegiscloud.site/api/pack">
+        <div class="col6">
+          <label>Work email</label>
+          <input name="work_email" type="email" placeholder="name@company.com" required />
+        </div>
+
+        <div class="col6">
+          <label>Company</label>
+          <input name="company" type="text" placeholder="Company name" required />
+        </div>
+
+        <div class="col6">
+          <label>Compliance (pick one)</label>
+          <select name="compliance" required>
+            <option value="" disabled selected>Select</option>
+            <option>HIPAA</option>
+            <option>FedRAMP</option>
+            <option>SOC2</option>
+            <option>PCI</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="col6">
+          <label>Team size</label>
+          <select name="team_size" required>
+            <option value="" disabled selected>Select</option>
+            <option>10–50</option>
+            <option>50–200</option>
+            <option>200+</option>
+          </select>
+        </div>
+
+        <div class="col12">
+          <label>Quick note (optional)</label>
+          <textarea name="note" placeholder="What is breaking onboarding today? (optional)"></textarea>
+        </div>
+
+        <!-- Honeypot -->
+        <div class="col12" style="display:none">
+          <label>Website</label>
+          <input name="website" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <!-- ✅ Track which CTA -->
+        <input type="hidden" name="intent" id="intentField" value="security_pack" />
+        <input type="hidden" name="source" value="landing-cloudflare" />
+        <input type="hidden" name="page" value="aegis" />
+
+        <div class="col12">
+          <button class="btn primary" type="submit" id="submitBtn">Send</button>
+          <div class="hint" id="hintText">Tip: if you want the pilot, write “pilot” in the note.</div>
+          <div class="success" id="successMsg">Thanks — we’ll reply by email within 24 hours.</div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const openPack = document.getElementById("openPack");
+      const openPilot = document.getElementById("openPilot");
+
+      const modal = document.getElementById("packModal");
+      const closeBtn = document.getElementById("closeModal");
+
+      const form = document.getElementById("packForm");
+      const submitBtn = document.getElementById("submitBtn");
+      const successMsg = document.getElementById("successMsg");
+      const replyNote = document.getElementById("replyNote");
+
+      const intentField = document.getElementById("intentField");
+      const titleEl = document.getElementById("packTitle");
+      const hintEl = document.getElementById("hintText");
+
+      const firstField = form ? form.querySelector('input[name="work_email"]') : null;
+
+      let replyTimer = null;
+
+      function resetDelayedNote(){
+        if(!replyNote) return;
+        if(replyTimer){ clearTimeout(replyTimer); replyTimer=null; }
+        replyNote.style.opacity="0";
+        replyNote.style.transform="translateY(-4px)";
+      }
+
+      function showDelayedNote(){
+        if(!replyNote) return;
+        replyTimer=setTimeout(()=>{
+          replyNote.style.transition="opacity .25s ease, transform .25s ease";
+          replyNote.style.opacity="1";
+          replyNote.style.transform="translateY(0)";
+        }, 1200);
+      }
+
+      function openModal(intent){
+        modal.classList.add("open");
+        modal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("modalOpen");
+
+        const i = intent || "security_pack";
+        intentField.value = i;
+
+        if(i === "pilot"){
+          titleEl.textContent = "Apply for the Pilot Program";
+          hintEl.textContent = 'Tip: share your stack + onboarding pain (e.g., “Codespaces banned”, “local laptops”, “VDI”).';
+        }else{
+          titleEl.textContent = "Request the Security Pack";
+          hintEl.textContent = 'Tip: if you want the pilot, write “pilot” in the note.';
+        }
+
+        if(successMsg) successMsg.style.display="none";
+
+        resetDelayedNote();
+        showDelayedNote();
+
+        setTimeout(()=> firstField && firstField.focus(), 50);
+      }
+
+      function closeModal(){
+        modal.classList.remove("open");
+        modal.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("modalOpen");
+        resetDelayedNote();
+      }
+
+      openPack && openPack.addEventListener("click", ()=>openModal("security_pack"));
+      openPilot && openPilot.addEventListener("click", ()=>openModal("pilot"));
+
+      closeBtn && closeBtn.addEventListener("click", closeModal);
+
+      modal && modal.addEventListener("click", (e)=>{
+        if(e.target === modal) closeModal();
+      });
+
+      document.addEventListener("keydown", (e)=>{
+        if(e.key === "Escape" && modal.classList.contains("open")) closeModal();
+      });
+
+      function serializeForm(formEl){
+        const fd = new FormData(formEl);
+        if(fd.get("website")) return { honeypot:true, body:null };
+        const data = {};
+        fd.forEach((v,k)=>data[k]=v);
+        return { honeypot:false, body: JSON.stringify(data) };
+      }
+
+      form && form.addEventListener("submit", async (e)=>{
+        e.preventDefault();
+        if(successMsg) successMsg.style.display="none";
+
+        const prevText = submitBtn.textContent;
+        submitBtn.disabled=true;
+        submitBtn.textContent="Sending…";
+
+        try{
+          const payload = serializeForm(form);
+          if(payload.honeypot){
+            if(successMsg) successMsg.style.display="block";
+            submitBtn.textContent="Sent ✓";
+            form.reset();
+            return;
+          }
+
+          const res = await fetch(form.action, {
+            method:"POST",
+            headers:{ "Content-Type":"application/json" },
+            body: payload.body
+          });
+
+          if(res.ok){
+            if(successMsg) successMsg.style.display="block";
+            submitBtn.textContent="Sent ✓";
+            form.reset();
+          }else{
+            alert("Could not send — try again.");
+          }
+        }catch(err){
+          alert("Could not send — try again.");
+        }finally{
+          setTimeout(()=>{
+            submitBtn.disabled=false;
+            submitBtn.textContent=prevText;
+          }, 900);
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
