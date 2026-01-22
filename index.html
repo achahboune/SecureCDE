@@ -189,6 +189,24 @@
   background: rgba(255,255,255,.06);
 }
 
+
+/* Pilot teaser (above the fold) */
+.pilotTeaser{
+  margin-top:14px;
+  padding:12px 14px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.04);
+}
+.pilotTeaserTitle{
+  font-weight:800;
+  margin-bottom:4px;
+}
+.pilotTeaserSub{
+  color:var(--muted);
+  font-size:14px;
+}
+
   </style>
 </head>
 
@@ -199,7 +217,10 @@
         <img src="/favicon.ico" class="logo" alt="" />
         <div class="brand">aegiscloud</div>
       </div>
-      <div class="pill">Audit-ready • No DevOps required</div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end">
+        <div class="pill">Audit-ready • No DevOps required</div>
+        <a class="pill" href="#pilot">Pilot program</a>
+      </div>
     </div>
 
     <section class="hero">
@@ -211,6 +232,12 @@ Audit-ready cloud dev environments for HIPAA, SOC 2, FedRAMP & regulated teams.
 
       <div class="ctaRow">
         <button class="btn primary" id="openPack" type="button">Request Security Pack</button>
+        <a class="btn secondary" href="#pilot">Apply for pilot</a>
+      </div>
+
+      <div class="pilotTeaser" role="note" aria-label="Pilot offer">
+        <div class="pilotTeaserTitle">Pilot program</div>
+        <div class="pilotTeaserSub">Up to 25 engineers · Audit-ready dev environments · <strong>$750–$1,500</strong> one-time</div>
       </div>
 <div class="trustBadges" aria-label="Trust and compliance features">
   <span class="badge soc2" title="SOC 2 controls + evidence pack (audit-ready)">
@@ -334,7 +361,7 @@ Audit-ready cloud dev environments for HIPAA, SOC 2, FedRAMP & regulated teams.
       <span>© 2026 aegiscloud</span>
     </div>
   </div>
-<section class="hero" style="margin-top:28px">
+<section class="hero" id="pilot" style="margin-top:28px">
   <h2>Pilot program</h2>
   <p class="sub">
   Launch Aegiscloud with your team in 30 days.
@@ -427,7 +454,7 @@ Audit-ready cloud dev environments for HIPAA, SOC 2, FedRAMP & regulated teams.
   (function () {
     const openBtn = document.getElementById("openPack");
     const modal = document.getElementById("packModal");
-    const overlay = document.getElementById("modalOverlay");
+    const overlay = document.getElementById("packModal");
     const closeBtn = document.getElementById("closeModal");
     const form = document.getElementById("packForm");
     const submitBtn = document.getElementById("submitBtn");
