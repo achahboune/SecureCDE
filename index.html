@@ -6,211 +6,170 @@
   <title>aegiscloud — Compliance-Ready Cloud Dev Environments</title>
   <meta name="description" content="Compliance-ready cloud dev environments for regulated engineering teams." />
 
-  <!-- Favicon -->
   <link rel="icon" href="/favicon.ico" sizes="any">
 
   <style>
     :root{
-      --bg:#0b1020; --card:#0f1733; --text:#e9eefc; --muted:#a9b4d6;
-      --line:rgba(255,255,255,.12); --btn:#ffffff; --btnText:#0b1020;
-      --accent:#7aa2ff; --radius:16px;
+      --bg:#111c3f;              /* ⬅️ fond global plus clair */
+      --card:#0f1733;
+      --text:#e9eefc;
+      --muted:#a9b4d6;
+      --line:rgba(255,255,255,.12);
+      --btn:#ffffff;
+      --btnText:#0b1020;
+      --accent:#7aa2ff;
+      --radius:16px;
     }
+
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
+
     body{
-      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      background: radial-gradient(1200px 600px at 30% -10%, rgba(122,162,255,.35), transparent 60%),
-                  radial-gradient(900px 500px at 80% 10%, rgba(122,255,210,.18), transparent 60%),
-                  var(--bg);
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background:
+        radial-gradient(1200px 700px at 30% -10%, rgba(122,162,255,.42), transparent 62%),
+        radial-gradient(900px 600px at 80% 10%, rgba(122,255,210,.22), transparent 62%),
+        radial-gradient(900px 700px at 40% 120%, rgba(122,162,255,.18), transparent 60%),
+        var(--bg);
       color:var(--text);
     }
+
+    /* voile clair pour éclaircir sans toucher aux cards */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      z-index:-1;
+      pointer-events:none;
+      background:
+        radial-gradient(1100px 700px at 25% -10%, rgba(122,162,255,.22), transparent 62%),
+        radial-gradient(900px 600px at 80% 10%, rgba(122,255,210,.14), transparent 62%),
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0));
+    }
+
+    @media (max-width:720px){
+      body::before{
+        background:
+          radial-gradient(900px 520px at 35% -10%, rgba(122,162,255,.28), transparent 62%),
+          radial-gradient(800px 520px at 80% 10%, rgba(122,255,210,.16), transparent 62%),
+          linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0));
+      }
+    }
+
     body.modalOpen{overflow:hidden}
     a{color:inherit}
+
     .wrap{max-width:980px; margin:0 auto; padding:40px 18px 70px}
 
-    .top{display:flex; gap:14px; align-items:center; justify-content:space-between; margin-bottom:26px;}
-    .brandGroup{display:flex; align-items:center; gap:10px; min-width:0;}
-    .logo{
-  width:44px;
-  height:44px;
-  border-radius:12px;
-  background:none;
-  border:none;
-  display:block;              /* évite les petits décalages */
-  object-fit:contain;         /* garde le logo propre */
-}
+    .top{
+      display:flex; gap:14px; align-items:center; justify-content:space-between;
+      margin-bottom:26px;
+    }
 
-.brandGroup{
-  display:flex;
-  align-items:center;         /* aligne logo + texte */
-  gap:14px;                   /* un peu plus d’air */
-}
+    .brandGroup{
+      display:flex; align-items:center; gap:14px;
+    }
+
+    .logo{
+      width:44px; height:44px;
+      border-radius:12px;
+      display:block;
+      object-fit:contain;
+    }
 
     .brand{font-weight:800; letter-spacing:.2px; white-space:nowrap}
-    .pill{font-size:12px; color:var(--muted); border:1px solid var(--line); padding:8px 10px; border-radius:999px;}
-    .pillBtn{cursor:pointer;background:transparent;}
+
+    .pill{
+      font-size:12px; color:var(--muted);
+      border:1px solid var(--line);
+      padding:8px 10px; border-radius:999px;
+      background:transparent;
+    }
+
+    .pillBtn{cursor:pointer}
     .pillBtn:hover{background:rgba(255,255,255,.06)}
 
-    .hero{border:1px solid var(--line); background:rgba(15,23,51,.75); border-radius:var(--radius); padding:28px;}
+    .hero{
+      border:1px solid var(--line);
+      background:rgba(15,23,51,.75);
+      border-radius:var(--radius);
+      padding:28px;
+    }
+
     h1{margin:0 0 10px; font-size:34px; line-height:1.1}
     .sub{margin:0 0 18px; color:var(--muted); font-size:16px}
+
     .ctaRow{display:flex; gap:10px; flex-wrap:wrap}
 
     .btn{
       display:inline-flex; align-items:center; justify-content:center;
-      padding:12px 14px; border-radius:12px; border:1px solid var(--line);
-      text-decoration:none; font-weight:700; cursor:pointer;
-      background:transparent; color:inherit;
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      font-weight:700;
+      cursor:pointer;
+      background:transparent;
+      color:inherit;
     }
-    .btn.primary{background:var(--btn); color:var(--btnText); border-color:transparent}
-    .btn.secondary{background:transparent}
 
-    .grid{display:grid; gap:14px; margin-top:14px; grid-template-columns: repeat(12, 1fr);}
+    .btn.primary{background:var(--btn); color:var(--btnText); border-color:transparent}
+
+    /* Pilot teaser */
+    .pilotTeaser{
+      margin-top:14px;
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+    }
+
+    .pilotTeaserTitle{font-weight:800; margin-bottom:4px}
+    .pilotTeaserSub{color:var(--muted); font-size:14px; line-height:1.35}
+    .pilotTeaserSub strong{color:var(--text)}
+
+    /* Cards */
+    .grid{
+      display:grid;
+      gap:14px;
+      margin-top:14px;
+      grid-template-columns: repeat(12, 1fr);
+    }
+
     .card{
       grid-column: span 6;
-      border:1px solid var(--line); background:rgba(15,23,51,.65);
-      border-radius:var(--radius); padding:18px;
+      border:1px solid var(--line);
+      background:rgba(15,23,51,.65);
+      border-radius:var(--radius);
+      padding:18px;
     }
-    .card h2{margin:0 0 10px; font-size:14px; letter-spacing:.4px; text-transform:uppercase; color:#cfd7f5}
+
+    .card h2{
+      margin:0 0 10px;
+      font-size:14px;
+      letter-spacing:.4px;
+      text-transform:uppercase;
+      color:#cfd7f5;
+    }
+
     ul{margin:0; padding-left:18px; color:var(--muted)}
     li{margin:8px 0}
 
-    /* Modal */
-    .modalOverlay{
-      position:fixed; inset:0; z-index:9999;
-      background:rgba(0,0,0,.55);
-      backdrop-filter: blur(8px);
-      display:none;
-      align-items:center; justify-content:center;
-      padding:18px;
-    }
-    .modalOverlay.open{display:flex}
-    .modal{
-      width:min(720px, 100%);
-      border:1px solid rgba(122,162,255,.35);
-      background: linear-gradient(180deg, rgba(122,162,255,.12), rgba(15,23,51,.88));
-      border-radius:var(--radius);
-      padding:18px;
-      box-shadow: 0 12px 55px rgba(0,0,0,.45);
-    }
-    .modalHeader{
-      display:flex; align-items:flex-start; justify-content:space-between;
-      gap:14px; margin-bottom:12px;
-    }
-    .formTitle{margin:0 0 6px; font-size:18px}
-    .formSub{margin:0; color:var(--muted); font-size:14px}
-    .iconBtn{
-      appearance:none; border:1px solid var(--line);
-      background:rgba(11,16,32,.35);
-      color:var(--text);
-      border-radius:12px;
-      height:38px; width:38px;
-      display:inline-flex; align-items:center; justify-content:center;
-      cursor:pointer;
-    }
-
-    form{display:grid; gap:10px; grid-template-columns: repeat(12, 1fr);}
-    label{font-size:12px; color:#cfd7f5; display:block; margin-bottom:6px}
-    input, select, textarea{
-      width:100%; padding:12px 12px; border-radius:12px;
-      border:1px solid var(--line); background:rgba(11,16,32,.55); color:var(--text);
-      outline:none;
-    }
-    textarea{min-height:90px; resize:vertical}
-    input::placeholder, textarea::placeholder{color:rgba(233,238,252,.55)}
-    .col6{grid-column: span 6}
-    .col12{grid-column: span 12}
-    .hint{font-size:12px; color:var(--muted); margin-top:8px}
-    .success{
-      margin-top:10px;
-      border:1px solid rgba(122,255,210,.25);
-      background:rgba(122,255,210,.10);
-      padding:12px 12px;
-      border-radius:12px;
-      color:#dffcf2;
-      display:none;
-    }
-
-    .footer{
-      margin-top:22px; color:var(--muted); font-size:12px;
-      display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;
-    }
-
     @media (max-width:720px){
       .card{grid-column: span 12}
-      .col6{grid-column: span 12}
       h1{font-size:28px}
       .pill{display:none}
     }
-/* === Trust badges (SaaS US icons) === */
-.trustBadges{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-top:14px;
-}
 
-.badge{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  padding:10px 12px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.04);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 8px 22px rgba(0,0,0,.22);
-  font-weight:700;
-  line-height:1;
-  white-space:nowrap;
-}
-
-.badge svg{
-  width:18px;
-  height:18px;
-  flex:0 0 18px;
-}
-
-.badge .label{
-  font-size:13px;
-  color: rgba(233,238,252,.95);
-}
-
-/* Icon colors */
-.badge.soc2 svg{ color:#00E5FF; }
-.badge.hipaa svg{ color:#2EE59D; }
-.badge.fedramp svg{ color:#FFB84D; }
-.badge.sso svg{ color:#2F6BFF; }
-.badge.audit svg{ color:#B38BFF; }
-.badge.vpc svg{ color:#FF4D6D; }
-
-.badge:hover{
-  transform: translateY(-1px);
-  transition: transform .15s ease, background .15s ease;
-  background: rgba(255,255,255,.06);
-}
-
-
-/* Pilot teaser (above the fold) */
-.pilotTeaser{
-  margin-top:14px;
-  padding:12px 14px;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.04);
-}
-.pilotTeaserTitle{
-  font-weight:800;
-  margin-bottom:4px;
-}
-.pilotTeaserSub{
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.35;
-}
-.pilotTeaserSub strong{color:var(--text);}
-
+    .footer{
+      margin-top:22px;
+      color:var(--muted);
+      font-size:12px;
+      display:flex;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      gap:10px;
+    }
   </style>
 </head>
 
@@ -218,372 +177,61 @@
   <div class="wrap">
     <div class="top">
       <div class="brandGroup">
-        <img src="/favicon.ico" class="logo" alt="" />
+        <img src="/favicon.ico" class="logo" alt="">
         <div class="brand">aegiscloud</div>
       </div>
-      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end">
+      <div style="display:flex;gap:10px;align-items:center">
         <div class="pill">Audit-ready • No DevOps required</div>
-        <button class="pill pillBtn" id="openPilotTop" type="button">Pilot program</button>
+        <button class="pill pillBtn" id="openPilotTop">Pilot program</button>
       </div>
     </div>
 
     <section class="hero">
       <h1>Your developers are blocked by compliance.<br>We unblock them in 24 hours.</h1>
-<p class="sub">
-Audit-ready cloud dev environments for HIPAA, SOC 2, FedRAMP & regulated teams.
-</p>
-
+      <p class="sub">Audit-ready cloud dev environments for HIPAA, SOC 2, FedRAMP & regulated teams.</p>
 
       <div class="ctaRow">
-        <button class="btn primary" id="openPack" type="button">Request Security Pack</button>
-        <button class="btn secondary" id="openPilot" type="button">Apply for pilot program</button>
+        <button class="btn primary" id="openPack">Request Security Pack</button>
+        <button class="btn" id="openPilot">Apply for pilot program</button>
       </div>
 
-      <div class="pilotTeaser" role="note" aria-label="Pilot offer">
+      <div class="pilotTeaser">
         <div class="pilotTeaserTitle">Pilot program — launch in 30 days</div>
         <div class="pilotTeaserSub">
-          Launch Aegiscloud with your team in 30 days.<br>
-          Up to 25 engineers · Private cloud workspaces · Security &amp; compliance mapping pack · Onboarding: new hire → first commit · Direct founder support · <strong>$750–$1,500</strong> (one-time pilot)
+          Up to 25 engineers · Private cloud workspaces · Security & compliance mapping pack ·
+          Onboarding: new hire → first commit · Direct founder support ·
+          <strong>$750–$1,500</strong>
         </div>
       </div>
 
-<div class="trustBadges" aria-label="Trust and compliance features">
-  <span class="badge soc2" title="SOC 2 controls + evidence pack (audit-ready)">
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M12 22s8-4 8-10V6l-8-3-8 3v6c0 6 8 10 8 10Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-      <path d="m9 12 2 2 4-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-    <span class="label">SOC 2 Ready</span>
-  </span>
+      <!-- Cards -->
+      <section class="grid">
+        <div class="card">
+          <h2>Without Aegiscloud</h2>
+          <ul>
+            <li>Onboarding takes 3–14 days</li>
+            <li>Local machines & shadow IT</li>
+            <li>Audits are painful & slow</li>
+            <li>Security teams block releases</li>
+          </ul>
+        </div>
 
-  <span class="badge hipaa" title="HIPAA-aligned safeguards for regulated workloads">
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M20 8.5c0 5-8 11.5-8 11.5S4 13.5 4 8.5C4 6 6 4 8.5 4c1.5 0 2.9.7 3.5 1.8C12.6 4.7 14 4 15.5 4 18 4 20 6 20 8.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-      <path d="M3 13h4l2-4 3 8 2-4h5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-    <span class="label">HIPAA Aligned</span>
-  </span>
+        <div class="card">
+          <h2>With Aegiscloud</h2>
+          <ul>
+            <li>Onboarding in 15 minutes</li>
+            <li>Fully controlled cloud workspaces</li>
+            <li>Instant audit evidence</li>
+            <li>Security teams say yes</li>
+          </ul>
+        </div>
+      </section>
 
-  <span class="badge fedramp" title="FedRAMP path: baseline controls + documentation">
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M12 2l2 4 4 .5-3 3 .7 4.2-3.7-2-3.7 2 .7-4.2-3-3 4-.5 2-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-      <path d="M8.5 14.5 7 22l5-3 5 3-1.5-7.5" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-    </svg>
-    <span class="label">FedRAMP Path</span>
-  </span>
-
-  <span class="badge sso" title="Single sign-on via Okta / Azure AD (SAML)">
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M15 7a5 5 0 1 1-9 3 5 5 0 0 1 9-3Z" stroke="currentColor" stroke-width="2"/>
-      <path d="M10 10h12v4h-3v3h-3v3h-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-    <span class="label">SSO / SAML</span>
-  </span>
-
-  <span class="badge audit" title="Immutable audit logs for access & actions">
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M6 4h11a2 2 0 0 1 2 2v14H8a2 2 0 0 1-2-2V4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-      <path d="M6 17a2 2 0 0 0 2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-      <path d="M9 7h7M9 11h7M9 15h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    </svg>
-    <span class="label">Audit Logs</span>
-  </span>
-
-  <span class="badge vpc" title="Private networking / VPC isolation option">
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M12 2v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-      <path d="M5 7h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-      <path d="M6 22v-6a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-      <path d="M6 22h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    </svg>
-    <span class="label">VPC Isolation</span>
-  </span>
-</div>
-
-    </section>
-<section class="grid">
-  <div class="card">
-    <h2>Without Aegiscloud</h2>
-    <ul>
-      <li>Onboarding takes 3–14 days</li>
-      <li>Local machines & shadow IT</li>
-      <li>Audits are painful & slow</li>
-      <li>Security teams block releases</li>
-    </ul>
-  </div>
-
-  <div class="card">
-    <h2>With Aegiscloud</h2>
-    <ul>
-      <li>Onboarding in 15 minutes</li>
-      <li>Fully controlled cloud workspaces</li>
-      <li>Instant audit evidence</li>
-      <li>Security teams say yes</li>
-    </ul>
-  </div>
-</section>
-
-    <section class="grid">
-      <div class="card">
-        <h2>Problem</h2>
-        <ul>
-          <li>“Works on my machine” slows delivery</li>
-          <li>Onboarding takes days</li>
-          <li>Dev/prod parity breaks on secrets, IAM, and auth</li>
-        </ul>
-      </div>
-
-      <div class="card">
-        <h2>Solution</h2>
-        <ul>
-          <li>SSO/SAML (Okta / Azure AD)</li>
-          <li>RBAC + audit logs</li>
-          <li>Data residency + egress controls</li>
-          <li>VPC / private networking option</li>
-          <li>Prebuilt workspaces from devcontainer</li>
-        </ul>
-      </div>
-
-      <div class="card">
-        <h2>Who it’s for</h2>
-        <ul>
-          <li>Healthcare / Fintech / Gov contractors</li>
-          <li>Teams blocked from Codespaces/Gitpod due to compliance</li>
-          <li>Teams that can’t run Coder self-hosted</li>
-        </ul>
-      </div>
-
-      <div class="card">
-        <h2>What you get (Pilot)</h2>
-        <ul>
-          <li>1–2 reference workspaces</li>
-          <li>Security + compliance mapping pack</li>
-          <li>Cost controls + auto-shutdown policies</li>
-          <li>Onboarding flow: new hire → first commit</li>
-        </ul>
+      <div class="footer">
+        <span>Privacy: we only use your info to respond.</span>
+        <span>© 2026 aegiscloud</span>
       </div>
     </section>
-
-    <div class="footer">
-      <span>Privacy: we only use your info to respond.</span>
-      <span>© 2026 aegiscloud</span>
-    </div>
   </div>
-
-<!-- Modal: Security Pack form -->
-  <div class="modalOverlay" id="packModal" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="packTitle">
-      <div class="modalHeader">
-        <div>
-          <h3 class="formTitle" id="packTitle">Request the Security Pack</h3>
-          <p class="formSub" id="replyNote" style="opacity:0; transform: translateY(-4px);">We reply by email within 24 hours.</p>
-        </div>
-        <button class="iconBtn" type="button" id="closeModal" aria-label="Close">✕</button>
-      </div>
-
-      <form id="packForm" method="POST" action="https://api.aegiscloud.site/api/pack" enctype="application/x-www-form-urlencoded">
-        <div class="col6">
-          <label>Work email</label>
-          <input name="work_email" type="email" placeholder="name@company.com" required />
-        </div>
-
-        <div class="col6">
-          <label>Company</label>
-          <input name="company" type="text" placeholder="Company name" required />
-        </div>
-
-        <div class="col6">
-          <label>Compliance (pick one)</label>
-          <select name="compliance" required>
-            <option value="" disabled selected>Select</option>
-            <option>HIPAA</option>
-            <option>FedRAMP</option>
-            <option>SOC2</option>
-            <option>PCI</option>
-            <option>Other</option>
-          </select>
-        </div>
-
-        <div class="col6">
-          <label>Team size</label>
-          <select name="team_size" required>
-            <option value="" disabled selected>Select</option>
-            <option>10–50</option>
-            <option>50–200</option>
-            <option>200+</option>
-          </select>
-        </div>
-
-        <div class="col12">
-          <label>Quick note (optional)</label>
-          <textarea name="note" placeholder="What is breaking onboarding today? (optional)"></textarea>
-        </div>
-
-        <div class="col12" style="display:none">
-          <label>Website</label>
-          <input name="website" type="text" tabindex="-1" autocomplete="off" />
-        </div>
-
-
-        <input type="hidden" name="intent" id="intentField" value="security_pack" />
-        <input type="hidden" name="source" value="landing-cloudflare" />
-        <input type="hidden" name="page" value="aegis" />
-
-        <div class="col12">
-          <button class="btn primary" type="submit" id="submitBtn">Send</button>
-          <div class="hint">Tip: if you want a pilot, write “pilot” in the note.</div>
-          <div class="success" id="successMsg">Thanks — we’ll reply by email within 24 hours.</div>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <script>
-  (function () {
-    const openBtn = document.getElementById("openPack");
-    const openPilotBtn = document.getElementById("openPilot");
-    const openPilotTop = document.getElementById("openPilotTop");
-    const modal = document.getElementById("packModal");
-    const overlay = document.getElementById("packModal");
-    const closeBtn = document.getElementById("closeModal");
-    const form = document.getElementById("packForm");
-    const submitBtn = document.getElementById("submitBtn");
-    const successMsg = document.getElementById("successMsg");
-    const errorMsg = document.getElementById("errorMsg");
-    const replyNote = document.getElementById("replyNote");
-    const intentField = document.getElementById("intentField");
-    const titleEl = document.getElementById("packTitle");
-    const hintEl = document.querySelector(".hint");
-    const firstField = form ? form.querySelector('input[name="work_email"]') : null;
-
-    let replyTimer = null;
-
-    function resetDelayedNote() {
-      if (!replyNote) return;
-      if (replyTimer) {
-        clearTimeout(replyTimer);
-        replyTimer = null;
-      }
-      replyNote.style.opacity = "0";
-      replyNote.style.transform = "translateY(-4px)";
-    }
-
-    function showDelayedNote() {
-      if (!replyNote) return;
-      replyTimer = setTimeout(() => {
-        replyNote.style.transition = "opacity .25s ease, transform .25s ease";
-        replyNote.style.opacity = "1";
-        replyNote.style.transform = "translateY(0)";
-      }, 3000);
-    }
-
-    function openModal(intent) {
-      if (!modal) return;
-      modal.classList.add("open");
-      modal.setAttribute("aria-hidden", "false");
-      document.body.classList.add("modalOpen");
-
-      // Set intent and copy
-      const i = intent || "security_pack";
-      if (intentField) intentField.value = i;
-      if (titleEl) titleEl.textContent = (i === "pilot") ? "Apply for the Pilot Program" : "Request the Security Pack";
-      if (hintEl) hintEl.textContent = (i === "pilot")
-        ? 'Tip: tell us your stack + onboarding pain (e.g., "Codespaces banned", "local laptops", "VDI").'
-        : 'Tip: if you want the pilot, write “pilot” in the note.';
-
-
-      if (successMsg) successMsg.style.display = "none";
-      if (errorMsg) errorMsg.style.display = "none";
-
-      resetDelayedNote();
-      showDelayedNote();
-
-      setTimeout(() => firstField && firstField.focus(), 50);
-    }
-
-    function closeModal() {
-      if (!modal) return;
-      modal.classList.remove("open");
-      modal.setAttribute("aria-hidden", "true");
-      document.body.classList.remove("modalOpen");
-      resetDelayedNote();
-    }
-
-    openBtn && openBtn.addEventListener("click", () => openModal("security_pack"));
-    openPilotBtn && openPilotBtn.addEventListener("click", () => openModal("pilot"));
-    openPilotTop && openPilotTop.addEventListener("click", () => openModal("pilot"));
-    closeBtn && closeBtn.addEventListener("click", closeModal);
-
-    overlay && overlay.addEventListener("click", (e) => {
-      if (e.target === overlay) closeModal();
-    });
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && modal && modal.classList.contains("open")) closeModal();
-    });
-
-    function serializeForm(formEl) {
-      const fd = new FormData(formEl);
-      // basic anti-spam: if honeypot filled, pretend success
-      if (fd.get("website")) return { honeypot: true, body: null };
-      const data = {};
-      fd.forEach((v, k) => (data[k] = v));
-      return { honeypot: false, body: JSON.stringify(data) };
-    }
-
-    form && form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      if (successMsg) successMsg.style.display = "none";
-      if (errorMsg) errorMsg.style.display = "none";
-
-      const prevText = submitBtn ? submitBtn.textContent : "";
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.textContent = "Sending…";
-      }
-
-      try {
-        const payload = serializeForm(form);
-        if (payload.honeypot) {
-          if (successMsg) successMsg.style.display = "block";
-          if (submitBtn) submitBtn.textContent = "Sent ✓";
-          form.reset();
-          return;
-        }
-
-        const res = await fetch(form.action, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: payload.body,
-        });
-
-        if (res.ok) {
-          if (successMsg) successMsg.style.display = "block";
-          if (submitBtn) submitBtn.textContent = "Sent ✓";
-          form.reset();
-          // keep modal open so they see the confirmation
-        } else {
-          if (errorMsg) {
-            errorMsg.style.display = "block";
-            try {
-              const t = await res.text();
-              if (t) errorMsg.textContent = "Could not send — try again or email us directly.";
-            } catch (_) {}
-          }
-        }
-      } catch (err) {
-        if (errorMsg) errorMsg.style.display = "block";
-      } finally {
-        if (submitBtn) {
-          setTimeout(() => {
-            submitBtn.disabled = false;
-            submitBtn.textContent = prevText || "Get audit-ready in 24h";
-          }, 900);
-        }
-      }
-    });
-  })();
-</script>
 </body>
 </html>
