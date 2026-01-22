@@ -48,6 +48,8 @@
 
     .brand{font-weight:800; letter-spacing:.2px; white-space:nowrap}
     .pill{font-size:12px; color:var(--muted); border:1px solid var(--line); padding:8px 10px; border-radius:999px;}
+    .pillBtn{cursor:pointer;background:transparent;}
+    .pillBtn:hover{background:rgba(255,255,255,.06)}
 
     .hero{border:1px solid var(--line); background:rgba(15,23,51,.75); border-radius:var(--radius); padding:28px;}
     h1{margin:0 0 10px; font-size:34px; line-height:1.1}
@@ -205,7 +207,9 @@
 .pilotTeaserSub{
   color:var(--muted);
   font-size:14px;
+  line-height:1.35;
 }
+.pilotTeaserSub strong{color:var(--text);}
 
   </style>
 </head>
@@ -219,7 +223,7 @@
       </div>
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end">
         <div class="pill">Audit-ready • No DevOps required</div>
-        <a class="pill" href="#pilot">Pilot program</a>
+        <button class="pill pillBtn" id="openPilotTop" type="button">Pilot program</button>
       </div>
     </div>
 
@@ -232,13 +236,17 @@ Audit-ready cloud dev environments for HIPAA, SOC 2, FedRAMP & regulated teams.
 
       <div class="ctaRow">
         <button class="btn primary" id="openPack" type="button">Request Security Pack</button>
-        <a class="btn secondary" href="#pilot">Apply for pilot</a>
+        <button class="btn secondary" id="openPilot" type="button">Apply for pilot program</button>
       </div>
 
       <div class="pilotTeaser" role="note" aria-label="Pilot offer">
-        <div class="pilotTeaserTitle">Pilot program</div>
-        <div class="pilotTeaserSub">Up to 25 engineers · Audit-ready dev environments · <strong>$750–$1,500</strong> one-time</div>
+        <div class="pilotTeaserTitle">Pilot program — launch in 30 days</div>
+        <div class="pilotTeaserSub">
+          Launch Aegiscloud with your team in 30 days.<br>
+          Up to 25 engineers · Private cloud workspaces · Security &amp; compliance mapping pack · Onboarding: new hire → first commit · Direct founder support · <strong>$750–$1,500</strong> (one-time pilot)
+        </div>
       </div>
+
 <div class="trustBadges" aria-label="Trust and compliance features">
   <span class="badge soc2" title="SOC 2 controls + evidence pack (audit-ready)">
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -361,29 +369,8 @@ Audit-ready cloud dev environments for HIPAA, SOC 2, FedRAMP & regulated teams.
       <span>© 2026 aegiscloud</span>
     </div>
   </div>
-<section class="hero" id="pilot" style="margin-top:28px">
-  <h2>Pilot program</h2>
-  <p class="sub">
-  Launch Aegiscloud with your team in 30 days.
-  </p>
 
-  <ul style="color:var(--muted)">
-    <li>Up to 25 engineers</li>
-    <li>Private cloud workspaces</li>
-    <li>Security & compliance mapping pack</li>
-    <li>Onboarding flow: new hire → first commit</li>
-    <li>Direct founder support</li>
-  </ul>
-
-  <p style="font-weight:800;margin-top:10px">$750 – $1,500 (one-time pilot)</p>
-
-  <div class="ctaRow">
-    <button class="btn primary" onclick="document.getElementById('openPack').click()">Apply for pilot</button>
-  </div>
-</section>
-
-
-  <!-- Modal: Security Pack form -->
+<!-- Modal: Security Pack form -->
   <div class="modalOverlay" id="packModal" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="packTitle">
       <div class="modalHeader">
@@ -438,6 +425,7 @@ Audit-ready cloud dev environments for HIPAA, SOC 2, FedRAMP & regulated teams.
         </div>
 
 
+        <input type="hidden" name="intent" id="intentField" value="security_pack" />
         <input type="hidden" name="source" value="landing-cloudflare" />
         <input type="hidden" name="page" value="aegis" />
 
@@ -453,6 +441,8 @@ Audit-ready cloud dev environments for HIPAA, SOC 2, FedRAMP & regulated teams.
   <script>
   (function () {
     const openBtn = document.getElementById("openPack");
+    const openPilotBtn = document.getElementById("openPilot");
+    const openPilotTop = document.getElementById("openPilotTop");
     const modal = document.getElementById("packModal");
     const overlay = document.getElementById("packModal");
     const closeBtn = document.getElementById("closeModal");
@@ -461,6 +451,9 @@ Audit-ready cloud dev environments for HIPAA, SOC 2, FedRAMP & regulated teams.
     const successMsg = document.getElementById("successMsg");
     const errorMsg = document.getElementById("errorMsg");
     const replyNote = document.getElementById("replyNote");
+    const intentField = document.getElementById("intentField");
+    const titleEl = document.getElementById("packTitle");
+    const hintEl = document.querySelector(".hint");
     const firstField = form ? form.querySelector('input[name="work_email"]') : null;
 
     let replyTimer = null;
@@ -484,11 +477,20 @@ Audit-ready cloud dev environments for HIPAA, SOC 2, FedRAMP & regulated teams.
       }, 3000);
     }
 
-    function openModal() {
+    function openModal(intent) {
       if (!modal) return;
       modal.classList.add("open");
       modal.setAttribute("aria-hidden", "false");
       document.body.classList.add("modalOpen");
+
+      // Set intent and copy
+      const i = intent || "security_pack";
+      if (intentField) intentField.value = i;
+      if (titleEl) titleEl.textContent = (i === "pilot") ? "Apply for the Pilot Program" : "Request the Security Pack";
+      if (hintEl) hintEl.textContent = (i === "pilot")
+        ? 'Tip: tell us your stack + onboarding pain (e.g., "Codespaces banned", "local laptops", "VDI").'
+        : 'Tip: if you want the pilot, write “pilot” in the note.';
+
 
       if (successMsg) successMsg.style.display = "none";
       if (errorMsg) errorMsg.style.display = "none";
@@ -507,7 +509,9 @@ Audit-ready cloud dev environments for HIPAA, SOC 2, FedRAMP & regulated teams.
       resetDelayedNote();
     }
 
-    openBtn && openBtn.addEventListener("click", openModal);
+    openBtn && openBtn.addEventListener("click", () => openModal("security_pack"));
+    openPilotBtn && openPilotBtn.addEventListener("click", () => openModal("pilot"));
+    openPilotTop && openPilotTop.addEventListener("click", () => openModal("pilot"));
     closeBtn && closeBtn.addEventListener("click", closeModal);
 
     overlay && overlay.addEventListener("click", (e) => {
